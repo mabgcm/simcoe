@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Upload } from "lucide-react";
 import { toast } from "sonner";
-import { uploadImage } from "@/lib/firebase/storage";
 
 /** Firebase Storage image uploader with progress state. */
 export function ImageUploader({ path = "uploads", onUploaded, label = "Görsel Yükle" }: { path?: string; onUploaded: (url: string) => void | Promise<void>; label?: string }) {
@@ -17,12 +16,24 @@ export function ImageUploader({ path = "uploads", onUploaded, label = "Görsel Y
     setProgress(0);
 
     try {
-      const url = await uploadImage(file, path, setProgress);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("path", path);
+      setProgress(35);
+      const response = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData
+      });
+      setProgress(85);
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(payload?.error || "Görsel yüklenemedi.");
+      const url = payload.url as string;
       await onUploaded(url);
+      setProgress(100);
       toast.success("Görsel yüklendi.");
     } catch (error) {
       console.error(error);
-      toast.error("Görsel yüklenemedi. Firebase Storage izinlerini kontrol edin.");
+      toast.error(error instanceof Error ? error.message : "Görsel yüklenemedi.");
     } finally {
       setUploading(false);
       event.target.value = "";
