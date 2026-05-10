@@ -6,49 +6,105 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { PaymentMethodSelector, type PaymentMethod } from "@/components/ui/PaymentMethodSelector";
 
-/** Interactive donation amount, interval and checkout form. */
+const PRESET_AMOUNTS = [10, 25, 50, 100];
+
+/** Interactive donation amount, interval and payment-method form. */
 export function DonateForm() {
   const t = useTranslations("donate");
   const searchParams = useSearchParams();
   const [amount, setAmount] = useState(Number(searchParams.get("amount")) || 25);
   const [interval, setInterval] = useState<"once" | "month" | "year">("once");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [method, setMethod] = useState<PaymentMethod>("card");
+  const [loading, setLoading] = useState(false);
 
   async function checkout() {
-    const response = await fetch("/api/donate/create-checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount, interval, donorName: "STA Supporter", donorEmail: "supporter@example.com" })
-    });
-    const data = (await response.json()) as { url?: string };
-    if (data.url) window.location.href = data.url;
+    if (!name.trim() || !email.trim()) return;
+    setLoading(true);
+    try {
+      const response = await fetch("/api/donate/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, interval, donorName: name.trim(), donorEmail: email.trim() })
+      });
+      const data = await response.json() as { url?: string };
+      if (data.url) window.location.href = data.url;
+    } finally {
+      setLoading(false);
+    }
   }
+
+  const interacNote = `Bağış tutarı: $${amount} CAD${interval !== "once" ? ` (${interval === "month" ? "aylık" : "yıllık"})` : ""}`;
 
   return (
     <div className="mt-8 rounded-lg border bg-white p-6 shadow-sm">
+      {/* Amount presets */}
       <div className="grid grid-cols-4 gap-2">
-        {[10, 25, 50, 100].map((value) => (
+        {PRESET_AMOUNTS.map((value) => (
           <Button key={value} variant={amount === value ? "default" : "outline"} onClick={() => setAmount(value)}>
             ${value}
           </Button>
         ))}
       </div>
-      <Input className="mt-4" type="number" min={1} value={amount} onChange={(event) => setAmount(Number(event.target.value))} aria-label={t("customAmount")} />
+      <Input
+        className="mt-3"
+        type="number"
+        min={1}
+        value={amount}
+        onChange={(e) => setAmount(Number(e.target.value))}
+        aria-label={t("customAmount")}
+      />
+
+      {/* Interval */}
       <div className="mt-4 grid grid-cols-3 gap-2">
-        {(["once", "month", "year"] as const).map((value) => (
-          <Button key={value} variant={interval === value ? "secondary" : "outline"} onClick={() => setInterval(value)}>
-            {value === "once" ? t("once") : value === "month" ? t("month") : t("year")}
+        {(["once", "month", "year"] as const).map((v) => (
+          <Button key={v} variant={interval === v ? "secondary" : "outline"} onClick={() => setInterval(v)}>
+            {v === "once" ? t("once") : v === "month" ? t("month") : t("year")}
           </Button>
         ))}
       </div>
-      <div className="mt-4 grid gap-3">
-        <Input placeholder={t("name")} />
-        <Input placeholder={t("email")} type="email" />
-        <Textarea placeholder={t("message")} />
+
+      {/* Donor info */}
+      <div className="mt-5 grid gap-3">
+        <Input
+          placeholder={t("name")}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <Input
+          placeholder={t("email")}
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <Textarea
+          placeholder={t("message")}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
       </div>
-      <Button className="mt-5 w-full" onClick={checkout}>
-        {t("button")}
-      </Button>
+
+      {/* Payment method */}
+      <div className="mt-5">
+        <PaymentMethodSelector value={method} onChange={setMethod} interacNote={interacNote} />
+      </div>
+
+      {/* Action */}
+      {method === "card" && (
+        <Button
+          className="mt-5 w-full"
+          onClick={checkout}
+          disabled={loading || !name.trim() || !email.trim() || amount < 1}
+        >
+          {loading ? "Yönlendiriliyor..." : `${t("button")} — $${amount} CAD`}
+        </Button>
+      )}
     </div>
   );
 }

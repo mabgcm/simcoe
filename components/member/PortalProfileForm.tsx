@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PaymentMethodSelector, type PaymentMethod } from "@/components/ui/PaymentMethodSelector";
 import { ProfilePhotoUploader } from "@/components/member/ProfilePhotoUploader";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/lib/firebase/config";
@@ -27,6 +28,7 @@ export function PortalProfileForm() {
   const [membershipStatus, setMembershipStatus] = useState<string>("pending_payment");
   const [membershipType, setMembershipType] = useState<string>("individual");
   const [payLoading, setPayLoading] = useState(false);
+  const [payMethod, setPayMethod] = useState<PaymentMethod>("card");
   const missing = useMemo(
     () => ({
       displayName: !displayName.trim(),
@@ -85,16 +87,25 @@ export function PortalProfileForm() {
       <h1 className="font-heading text-5xl text-secondary">{t("profile")}</h1>
 
       {(isNew || membershipStatus === "pending_payment") && (
-        <div className="mt-4 rounded-lg border border-primary/30 bg-primary/5 p-4">
-          <p className="font-semibold text-secondary">
-            {isNew ? "Hoş geldiniz! Profilinizi tamamlayın ve üyelik ücretinizi ödeyin." : "Üyelik ücretiniz henüz ödenmedi."}
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Bireysel üyelik: <strong>$30/yıl</strong> — Ödeme tamamlanana kadar bazı özellikler kısıtlıdır.
-          </p>
-          <Button className="mt-3" size="sm" onClick={handlePay} disabled={payLoading}>
-            {payLoading ? "Yönlendiriliyor..." : "Üyelik Ücretini Öde →"}
-          </Button>
+        <div className="mt-4 rounded-lg border border-primary/30 bg-primary/5 p-5 grid gap-4">
+          <div>
+            <p className="font-semibold text-secondary">
+              {isNew ? "Hoş geldiniz! Profilinizi tamamlayın ve üyelik ücretinizi ödeyin." : "Üyelik ücretiniz henüz ödenmedi."}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Bireysel üyelik: <strong>$30/yıl</strong> — Ödeme tamamlanana kadar bazı özellikler kısıtlıdır.
+            </p>
+          </div>
+          <PaymentMethodSelector
+            value={payMethod}
+            onChange={setPayMethod}
+            interacNote="Açıklama alanına adınızı ve 'Üyelik' yazın."
+          />
+          {payMethod === "card" && (
+            <Button onClick={handlePay} disabled={payLoading} className="w-fit">
+              {payLoading ? "Yönlendiriliyor..." : "Kredi Kartı ile Öde — $30 CAD →"}
+            </Button>
+          )}
         </div>
       )}
 
