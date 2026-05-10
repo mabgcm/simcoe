@@ -8,16 +8,23 @@ export default async function EditNewsPage({ params, searchParams }: { params: {
   const [article, admin] = await Promise.all([getAdminNewsById(params.id), getCurrentAdmin()]);
   if (!article) notFound();
   const owner = article.authorId === admin?.uid;
+  // Admins can also edit pending member posts before approving them.
+  const canEdit = owner || (article.source === "member" && article.status === "pending_admin");
+  // ContentForm only knows draft/published/scheduled; normalize pending_admin and rejected to draft.
+  const formStatus = (article.status === "pending_admin" || article.status === "rejected") ? "draft" : (article.status ?? "draft");
+  const editTitle = canEdit && searchParams.view !== "1"
+    ? (article.source === "member" && article.status === "pending_admin" ? "Üye Gönderisini Düzenle" : "İçeriği Düzenle")
+    : "İçerik Görüntüle";
   return (
     <ContentForm
-      title={owner && searchParams.view !== "1" ? "İçeriği Düzenle" : "İçerik Görüntüle"}
+      title={editTitle}
       documentId={params.id}
       collectionName="news"
-      readOnly={!owner || searchParams.view === "1"}
+      readOnly={!canEdit || searchParams.view === "1"}
       defaultType={article.contentType || "news"}
       initialValues={{
         contentType: article.contentType || "news",
-        status: article.status || "draft",
+        status: formStatus,
         scheduledAt: article.scheduledAt,
         title: article.title,
         slug: article.slug,

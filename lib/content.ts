@@ -18,7 +18,7 @@ export type PublicNewsArticle = {
   source: "member" | "admin";
   readMinutes: number;
   contentType?: "news" | "announcement";
-  status?: "draft" | "published" | "scheduled";
+  status?: "draft" | "published" | "scheduled" | "pending_admin" | "rejected";
   scheduledAt?: Date | null;
 };
 

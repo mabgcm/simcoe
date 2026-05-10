@@ -2,8 +2,9 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -92,6 +93,12 @@ export function PendingPostsList({ posts }: { posts: Post[] }) {
               <Button size="sm" variant="outline" onClick={() => toggle(post.id)}>
                 {expanded === post.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 Önizleme
+              </Button>
+              <Button size="sm" variant="outline" asChild>
+                <Link href={`/admin/news/${post.id}/edit`}>
+                  <Pencil className="h-4 w-4" />
+                  Düzenle
+                </Link>
               </Button>
               <Button size="sm" onClick={() => handleAction(post.id, "approve")}>Onayla</Button>
               <Button size="sm" variant="outline" className="border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleAction(post.id, "reject")}>Reddet</Button>
