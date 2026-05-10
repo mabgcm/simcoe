@@ -12,23 +12,30 @@ function statusBadge(status: string) {
 }
 
 async function getMemberPosts(uid: string) {
-  const snap = await getAdminDb()
-    .collection("news")
-    .where("authorId", "==", uid)
-    .where("source", "==", "member")
-    .orderBy("createdAt", "desc")
-    .limit(50)
-    .get();
-  return snap.docs.map((doc) => {
-    const d = doc.data();
-    return {
-      id: doc.id,
-      title: (d.title as string) || "",
-      contentType: (d.contentType as string) || "news",
-      status: (d.status as string) || "pending_admin",
-      createdAt: d.createdAt?.toDate?.()?.toLocaleDateString("tr-TR") ?? "-"
-    };
-  });
+  try {
+    // Single equality filter on authorId avoids composite index requirement.
+    const snap = await getAdminDb()
+      .collection("news")
+      .where("authorId", "==", uid)
+      .limit(50)
+      .get();
+    return snap.docs
+      .filter((doc) => doc.data().source === "member")
+      .map((doc) => {
+        const d = doc.data();
+        return {
+          id: doc.id,
+          title: (d.title as string) || "",
+          contentType: (d.contentType as string) || "news",
+          status: (d.status as string) || "pending_admin",
+          createdAt: (d.createdAt as { toDate?: () => Date } | null)?.toDate?.()?.toLocaleDateString("tr-TR") ?? "-"
+        };
+      })
+      .sort((a, b) => a.createdAt < b.createdAt ? 1 : -1);
+  } catch (error) {
+    console.error("Unable to load member posts.", error);
+    return [];
+  }
 }
 
 export default async function MemberPostsPage() {

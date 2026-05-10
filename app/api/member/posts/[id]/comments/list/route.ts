@@ -16,10 +16,15 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     const snap = await getAdminDb()
       .collection("news").doc(params.id)
       .collection("comments")
-      .orderBy("createdAt", "asc")
       .get();
 
-    const comments = snap.docs.map((doc) => {
+    const comments = snap.docs
+      .sort((a, b) => {
+        const at = (a.data().createdAt as { toDate?: () => Date } | null)?.toDate?.()?.getTime() ?? 0;
+        const bt = (b.data().createdAt as { toDate?: () => Date } | null)?.toDate?.()?.getTime() ?? 0;
+        return at - bt;
+      })
+      .map((doc) => {
       const d = doc.data();
       return {
         id: doc.id,

@@ -33,12 +33,10 @@ export async function GET(request: NextRequest) {
   const snap = await getAdminDb()
     .collection("news")
     .where("authorId", "==", member.uid)
-    .where("source", "==", "member")
-    .orderBy("createdAt", "desc")
     .limit(50)
     .get();
 
-  const posts = snap.docs.map((doc) => {
+  const posts = snap.docs.filter((doc) => doc.data().source === "member").map((doc) => {
     const d = doc.data();
     return {
       id: doc.id,

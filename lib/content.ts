@@ -194,36 +194,47 @@ export async function getAdminNewsById(id: string) {
 }
 
 export async function listPendingMemberPosts(max = 50) {
-  const snapshot = await getAdminDb()
-    .collection("news")
-    .where("source", "==", "member")
-    .where("status", "==", "pending_admin")
-    .limit(max)
-    .get();
-  return snapshot.docs
-    .map((doc) => ({ ...normalizeNews(doc.id, doc.data()), authorPhotoURL: (doc.data().authorPhotoURL as string) || "" }))
-    .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
+  try {
+    // Single-field query avoids composite index requirement; filter source in memory.
+    const snapshot = await getAdminDb()
+      .collection("news")
+      .where("status", "==", "pending_admin")
+      .limit(max)
+      .get();
+    return snapshot.docs
+      .filter((doc) => doc.data().source === "member")
+      .map((doc) => ({ ...normalizeNews(doc.id, doc.data()), authorPhotoURL: (doc.data().authorPhotoURL as string) || "" }))
+      .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
+  } catch (error) {
+    console.error("Unable to load pending member posts.", error);
+    return [];
+  }
 }
 
 export async function getPostComments(postId: string) {
-  const snapshot = await getAdminDb()
-    .collection("news").doc(postId)
-    .collection("comments")
-    .orderBy("createdAt", "asc")
-    .get();
-  return snapshot.docs.map((doc) => {
-    const d = doc.data();
-    const createdAt = d.createdAt ? toDate(d.createdAt) : new Date();
-    return {
-      id: doc.id,
-      authorId: (d.authorId as string) || "",
-      authorName: (d.authorName as string) || "Üye",
-      authorPhotoURL: (d.authorPhotoURL as string) || "",
-      content: (d.content as string) || "",
-      status: (d.status as string) || "pending",
-      createdAt
-    };
-  });
+  try {
+    const snapshot = await getAdminDb()
+      .collection("news").doc(postId)
+      .collection("comments")
+      .get();
+    return snapshot.docs
+      .map((doc) => {
+        const d = doc.data();
+        return {
+          id: doc.id,
+          authorId: (d.authorId as string) || "",
+          authorName: (d.authorName as string) || "Üye",
+          authorPhotoURL: (d.authorPhotoURL as string) || "",
+          content: (d.content as string) || "",
+          status: (d.status as string) || "pending",
+          createdAt: d.createdAt ? toDate(d.createdAt) : new Date()
+        };
+      })
+      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+  } catch (error) {
+    console.error("Unable to load post comments.", error);
+    return [];
+  }
 }
 
 export async function getAdminEventById(id: string) {

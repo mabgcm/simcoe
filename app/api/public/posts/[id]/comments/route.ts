@@ -9,23 +9,25 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
       return NextResponse.json({ comments: [] });
     }
 
+    // Avoid composite index: fetch all, filter in memory.
     const snap = await getAdminDb()
       .collection("news").doc(params.id)
       .collection("comments")
-      .where("status", "==", "approved")
-      .orderBy("createdAt", "asc")
       .get();
 
-    const comments = snap.docs.map((doc) => {
-      const d = doc.data();
-      return {
-        id: doc.id,
-        authorName: (d.authorName as string) || "Üye",
-        authorPhotoURL: (d.authorPhotoURL as string) || "",
-        content: (d.content as string) || "",
-        createdAt: d.createdAt?.toDate?.()?.toISOString() ?? null
-      };
-    });
+    const comments = snap.docs
+      .filter((doc) => doc.data().status === "approved")
+      .map((doc) => {
+        const d = doc.data();
+        return {
+          id: doc.id,
+          authorName: (d.authorName as string) || "Üye",
+          authorPhotoURL: (d.authorPhotoURL as string) || "",
+          content: (d.content as string) || "",
+          createdAt: (d.createdAt as { toDate?: () => Date } | null)?.toDate?.()?.toISOString() ?? null
+        };
+      })
+      .sort((a, b) => (a.createdAt ?? "") < (b.createdAt ?? "") ? -1 : 1);
 
     return NextResponse.json({ comments });
   } catch {
