@@ -62,8 +62,15 @@ export function Footer() {
     <footer className="border-t bg-secondary text-white">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-4 lg:px-8">
         <div className="md:col-span-2">
-          <div className="flex items-center gap-3">
-            <Image src="/images/logo.png" alt={t("logoAlt")} width={52} height={52} className="h-12 w-12 rounded-lg object-contain" />
+          <div className="flex items-center gap-4">
+            <Image
+              src="/images/logo.png"
+              alt={t("logoAlt")}
+              width={128}
+              height={88}
+              className="shrink-0 rounded-lg object-contain"
+              style={{ width: "128px", height: "88px" }}
+            />
             <h2 className="font-heading text-2xl leading-tight">{t("brandName")}</h2>
           </div>
           <p className="mt-3 max-w-md text-sm leading-6 text-white/75">{t("tagline")}</p>
