@@ -117,7 +117,7 @@ export function EventCalendar({ events }: { events: CalEvent[] }) {
           </div>
 
           {/* Calendar body */}
-          <div className={cn("sta-calendar p-3", view === "agenda" ? "min-h-64" : "h-[620px]")}>
+          <div className="sta-calendar p-3" style={{ height: view === "agenda" ? "auto" : 620, minHeight: view === "agenda" ? 256 : undefined }}>
             <Calendar
               localizer={localizer}
               events={rbcEvents}

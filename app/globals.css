@@ -54,7 +54,7 @@ textarea {
 }
 
 /* ─── react-big-calendar overrides ─────────────────────────────────────── */
-.sta-calendar { height: 100%; }
+.sta-calendar .rbc-calendar { height: 100%; }
 
 .sta-calendar .rbc-month-view,
 .sta-calendar .rbc-time-view,
