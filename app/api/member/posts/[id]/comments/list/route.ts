@@ -7,7 +7,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const decoded = await getAdminAuth().verifyIdToken(session);
+    const decoded = await getAdminAuth().verifySessionCookie(session);
     const postSnap = await getAdminDb().collection("news").doc(params.id).get();
     if (!postSnap.exists || postSnap.data()?.authorId !== decoded.uid) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });

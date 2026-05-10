@@ -44,7 +44,7 @@ export default async function MemberPostsPage() {
 
   let uid: string;
   try {
-    const decoded = await getAdminAuth().verifyIdToken(session);
+    const decoded = await getAdminAuth().verifySessionCookie(session);
     uid = decoded.uid;
     const snap = await getAdminDb().collection("users").doc(uid).get();
     if (snap.data()?.membershipStatus !== "active") redirect("/portal/profile?new=1");

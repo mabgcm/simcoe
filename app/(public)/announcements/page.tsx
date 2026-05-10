@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 import { NewsSearch } from "@/components/news/NewsSearch";
 import { MemberPostCTA } from "@/components/news/MemberPostCTA";

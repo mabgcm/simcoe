@@ -5,7 +5,7 @@ async function requireSession(request: NextRequest) {
   const session = request.cookies.get("session")?.value;
   if (!session) return null;
   try {
-    return await getAdminAuth().verifyIdToken(session);
+    return await getAdminAuth().verifySessionCookie(session);
   } catch {
     return null;
   }

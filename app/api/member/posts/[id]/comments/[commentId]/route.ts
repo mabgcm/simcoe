@@ -6,7 +6,7 @@ async function requirePostOwner(request: NextRequest, postId: string) {
   const session = request.cookies.get("session")?.value;
   if (!session) return null;
   try {
-    const decoded = await getAdminAuth().verifyIdToken(session);
+    const decoded = await getAdminAuth().verifySessionCookie(session);
     const postSnap = await getAdminDb().collection("news").doc(postId).get();
     if (!postSnap.exists) return null;
     if (postSnap.data()?.authorId !== decoded.uid) return null;

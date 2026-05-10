@@ -11,7 +11,7 @@ export default async function NewMemberPostPage() {
   let authorPhotoURL = "";
 
   try {
-    const decoded = await getAdminAuth().verifyIdToken(session);
+    const decoded = await getAdminAuth().verifySessionCookie(session);
     const snap = await getAdminDb().collection("users").doc(decoded.uid).get();
     const data = snap.data();
     if (data?.membershipStatus !== "active") redirect("/portal/profile?new=1");

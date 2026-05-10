@@ -13,7 +13,7 @@ export async function getCurrentAdmin(): Promise<CurrentAdmin | null> {
   if (!session) return null;
 
   try {
-    const decoded = await getAdminAuth().verifyIdToken(session);
+    const decoded = await getAdminAuth().verifySessionCookie(session);
     const userDoc = await getAdminDb().collection("users").doc(decoded.uid).get();
     const data = userDoc.data();
     const role = data?.role;

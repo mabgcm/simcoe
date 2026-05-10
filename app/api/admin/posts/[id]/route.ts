@@ -6,7 +6,7 @@ async function requireAdmin(request: NextRequest) {
   const session = request.cookies.get("session")?.value;
   if (!session) return null;
   try {
-    const decoded = await getAdminAuth().verifyIdToken(session);
+    const decoded = await getAdminAuth().verifySessionCookie(session);
     const snap = await getAdminDb().collection("users").doc(decoded.uid).get();
     const role = snap.data()?.role;
     if (role !== "admin" && role !== "super_admin") return null;

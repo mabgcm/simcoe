@@ -11,7 +11,7 @@ async function requireActiveMember(request: NextRequest) {
   const session = request.cookies.get("session")?.value;
   if (!session) return null;
   try {
-    const decoded = await getAdminAuth().verifyIdToken(session);
+    const decoded = await getAdminAuth().verifySessionCookie(session);
     const snap = await getAdminDb().collection("users").doc(decoded.uid).get();
     const data = snap.data();
     if (data?.membershipStatus !== "active") return null;

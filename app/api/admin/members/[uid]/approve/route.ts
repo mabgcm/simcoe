@@ -16,7 +16,7 @@ export async function POST(req: NextRequest, { params }: { params: { uid: string
 
   const auth = getAdminAuth();
   const db = getAdminDb();
-  const decoded = await auth.verifyIdToken(session);
+  const decoded = await auth.verifySessionCookie(session);
   const adminDoc = await db.collection("users").doc(decoded.uid).get();
   const adminRole = adminDoc.data()?.role;
 

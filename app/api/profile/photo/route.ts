@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   if (file.size > maxSize) return NextResponse.json({ error: "File is too large" }, { status: 400 });
 
   const auth = getAdminAuth();
-  const decoded = await auth.verifyIdToken(session);
+  const decoded = await auth.verifySessionCookie(session);
   const uid = decoded.uid;
   const bucketName = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
   if (!bucketName) return NextResponse.json({ error: "Storage bucket is not configured" }, { status: 500 });
