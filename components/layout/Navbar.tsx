@@ -37,9 +37,17 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3" aria-label={t("homeLabel")}>
-          <Image src="/images/logo.png" alt={t("logoAlt")} width={44} height={44} className="h-11 w-11 rounded-lg object-contain" priority />
+          <Image
+            src="/images/logo.png"
+            alt={t("logoAlt")}
+            width={104}
+            height={72}
+            className="shrink-0 rounded-lg object-contain"
+            style={{ width: "104px", height: "72px" }}
+            priority
+          />
           <span className="hidden max-w-[280px] font-heading text-xl font-bold leading-tight text-secondary sm:block">{t("brandName")}</span>
         </Link>
         <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary navigation">
