@@ -31,6 +31,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         authorName: (d.authorName as string) || "Üye",
         authorPhotoURL: (d.authorPhotoURL as string) || "",
         content: (d.content as string) || "",
+        parentId: (d.parentId as string | null) ?? null,
         status: (d.status as string) || "pending",
         createdAt: d.createdAt?.toDate?.()?.toISOString() ?? null
       };

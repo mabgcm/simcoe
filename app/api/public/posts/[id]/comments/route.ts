@@ -24,6 +24,7 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
           authorName: (d.authorName as string) || "Üye",
           authorPhotoURL: (d.authorPhotoURL as string) || "",
           content: (d.content as string) || "",
+          parentId: (d.parentId as string | null) ?? null,
           createdAt: (d.createdAt as { toDate?: () => Date } | null)?.toDate?.()?.toISOString() ?? null
         };
       })

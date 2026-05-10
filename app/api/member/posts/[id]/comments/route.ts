@@ -33,6 +33,17 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   const body = await request.json() as Record<string, unknown>;
   const content = typeof body.content === "string" ? body.content.trim() : "";
   if (!content) return NextResponse.json({ error: "Yorum boş olamaz." }, { status: 400 });
+  const parentId = typeof body.parentId === "string" ? body.parentId : null;
+
+  // If replying, verify the parent comment exists and is approved.
+  if (parentId) {
+    const parentSnap = await getAdminDb()
+      .collection("news").doc(params.id)
+      .collection("comments").doc(parentId).get();
+    if (!parentSnap.exists || parentSnap.data()?.status !== "approved" || parentSnap.data()?.parentId) {
+      return NextResponse.json({ error: "Geçersiz yorum." }, { status: 400 });
+    }
+  }
 
   const commentRef = await getAdminDb()
     .collection("news").doc(params.id)
@@ -42,6 +53,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       authorName: member.name,
       authorPhotoURL: member.photoURL,
       content,
+      parentId,
       status: "pending",
       createdAt: FieldValue.serverTimestamp()
     });
