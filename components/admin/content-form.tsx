@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { slugify } from "@/lib/utils/slugify";
+import { formatTorontoDateTimeInput, scheduleTimeZoneLabel } from "@/lib/utils/timeZone";
 
 type ContentType = "news" | "announcement" | "event";
 type PublishStatus = "published" | "draft" | "scheduled";
@@ -42,11 +43,8 @@ type ContentFormProps = {
 
 const defaultCoverImage = "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80";
 
-/** Unified admin content form that saves news, announcements and events to Firestore. */
 function dateTimeInputValue(date?: Date | null) {
-  if (!date) return "";
-  const offset = date.getTimezoneOffset() * 60000;
-  return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+  return formatTorontoDateTimeInput(date);
 }
 
 /** Unified admin content form that saves news, announcements and events to Firestore. */
@@ -147,7 +145,7 @@ export function ContentForm({ title, defaultType = "news", documentId, collectio
 
         {status === "scheduled" ? (
           <label className="grid gap-2 text-sm font-semibold text-secondary">
-            Yayın zamanı
+            Yayın zamanı ({scheduleTimeZoneLabel})
             <Input value={scheduledAt} onChange={(event) => setScheduledAt(event.target.value)} type="datetime-local" required />
           </label>
         ) : null}

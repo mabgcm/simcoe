@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase/admin";
 import { slugify } from "@/lib/utils/slugify";
+import { parseTorontoDateTime } from "@/lib/utils/timeZone";
 
 const contentTypes = ["news", "announcement", "event"] as const;
 const statuses = ["draft", "published", "scheduled"] as const;
@@ -33,7 +34,7 @@ function asDate(value: unknown, fallback = new Date()) {
 
 function scheduledTimestamp(status: PublishStatus, value: unknown) {
   if (status !== "scheduled") return null;
-  const date = asDate(value);
+  const date = parseTorontoDateTime(asString(value));
   return Timestamp.fromDate(date);
 }
 
