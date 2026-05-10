@@ -17,28 +17,56 @@ type PublishStatus = "published" | "draft" | "scheduled";
 type ContentFormProps = {
   title: string;
   defaultType?: ContentType;
+  documentId?: string;
+  collectionName?: "news" | "events";
+  readOnly?: boolean;
+  initialValues?: {
+    contentType?: ContentType;
+    status?: PublishStatus;
+    scheduledAt?: Date | null;
+    title?: string;
+    slug?: string;
+    excerpt?: string;
+    category?: string;
+    content?: string;
+    coverImage?: string;
+    location?: string;
+    address?: string;
+    startDate?: Date;
+    endDate?: Date;
+    price?: number;
+    capacity?: number | null;
+    conditions?: string;
+  };
 };
 
 const defaultCoverImage = "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80";
 
 /** Unified admin content form that saves news, announcements and events to Firestore. */
-export function ContentForm({ title, defaultType = "news" }: ContentFormProps) {
+function dateTimeInputValue(date?: Date | null) {
+  if (!date) return "";
+  const offset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+}
+
+/** Unified admin content form that saves news, announcements and events to Firestore. */
+export function ContentForm({ title, defaultType = "news", documentId, collectionName, readOnly = false, initialValues }: ContentFormProps) {
   const router = useRouter();
-  const [contentType, setContentType] = useState<ContentType>(defaultType);
-  const [status, setStatus] = useState<PublishStatus>("published");
-  const [scheduledAt, setScheduledAt] = useState("");
-  const [name, setName] = useState("");
-  const [excerpt, setExcerpt] = useState("");
-  const [category, setCategory] = useState("");
-  const [content, setContent] = useState("");
-  const [coverImage, setCoverImage] = useState(defaultCoverImage);
-  const [location, setLocation] = useState("");
-  const [address, setAddress] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [price, setPrice] = useState("0");
-  const [capacity, setCapacity] = useState("");
-  const [conditions, setConditions] = useState("");
+  const [contentType, setContentType] = useState<ContentType>(initialValues?.contentType || defaultType);
+  const [status, setStatus] = useState<PublishStatus>(initialValues?.status || "published");
+  const [scheduledAt, setScheduledAt] = useState(dateTimeInputValue(initialValues?.scheduledAt));
+  const [name, setName] = useState(initialValues?.title || "");
+  const [excerpt, setExcerpt] = useState(initialValues?.excerpt || "");
+  const [category, setCategory] = useState(initialValues?.category || "");
+  const [content, setContent] = useState(initialValues?.content || "");
+  const [coverImage, setCoverImage] = useState(initialValues?.coverImage || defaultCoverImage);
+  const [location, setLocation] = useState(initialValues?.location || "");
+  const [address, setAddress] = useState(initialValues?.address || "");
+  const [startDate, setStartDate] = useState(dateTimeInputValue(initialValues?.startDate));
+  const [endDate, setEndDate] = useState(dateTimeInputValue(initialValues?.endDate));
+  const [price, setPrice] = useState(String(initialValues?.price ?? 0));
+  const [capacity, setCapacity] = useState(initialValues?.capacity ? String(initialValues.capacity) : "");
+  const [conditions, setConditions] = useState(initialValues?.conditions || "");
   const [saving, setSaving] = useState(false);
   const slug = useMemo(() => slugify(name), [name]);
   const isEvent = contentType === "event";
@@ -48,8 +76,8 @@ export function ContentForm({ title, defaultType = "news" }: ContentFormProps) {
     setSaving(true);
 
     try {
-      const response = await fetch("/api/admin/content", {
-        method: "POST",
+      const response = await fetch(documentId && collectionName ? `/api/admin/content/${collectionName}/${documentId}` : "/api/admin/content", {
+        method: documentId && collectionName ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           contentType,
@@ -90,6 +118,7 @@ export function ContentForm({ title, defaultType = "news" }: ContentFormProps) {
     <section>
       <h1 className="font-heading text-4xl text-secondary">{title}</h1>
       <form className="mt-6 grid gap-4 rounded-lg border bg-white p-5 shadow-sm" onSubmit={submit}>
+        <fieldset disabled={readOnly || saving} className="grid gap-4 disabled:opacity-90">
         <div className="grid gap-4 md:grid-cols-3">
           <label className="grid gap-2 text-sm font-semibold text-secondary">
             İçerik türü
@@ -143,10 +172,11 @@ export function ContentForm({ title, defaultType = "news" }: ContentFormProps) {
         ) : null}
 
         <RichTextEditor value={content} onChange={setContent} />
+        </fieldset>
         <div className="flex gap-2">
-          <Button disabled={saving || !name || !content || (status === "scheduled" && !scheduledAt) || (isEvent && (!startDate || !endDate || !location))}>{saving ? "Kaydediliyor..." : status === "published" ? "Yayınla" : status === "scheduled" ? "Zamanla" : "Taslak Kaydet"}</Button>
+          {!readOnly ? <Button disabled={saving || !name || !content || (status === "scheduled" && !scheduledAt) || (isEvent && (!startDate || !endDate || !location))}>{saving ? "Kaydediliyor..." : status === "published" ? "Yayınla" : status === "scheduled" ? "Zamanla" : "Taslak Kaydet"}</Button> : null}
           <Button type="button" variant="outline" onClick={() => router.back()}>
-            İptal
+            {readOnly ? "Geri" : "İptal"}
           </Button>
         </div>
       </form>

@@ -13,6 +13,7 @@ export type PublicNewsArticle = {
   coverImage: string;
   publishedAt: Date;
   author: string;
+  authorId: string;
   readMinutes: number;
   contentType?: "news" | "announcement";
   status?: "draft" | "published" | "scheduled";
@@ -37,6 +38,8 @@ export type PublicEvent = {
   registrationDeadline: Date | null;
   price: number;
   status: "upcoming" | "ongoing" | "past" | "cancelled";
+  author: string;
+  authorId: string;
   publishStatus?: "draft" | "published" | "scheduled";
   publishedAt?: Date | null;
   scheduledAt?: Date | null;
@@ -72,6 +75,7 @@ function normalizeNews(id: string, data: Record<string, any>): PublicNewsArticle
     coverImage: data.coverImage || data.image || "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80",
     publishedAt: toDate(data.publishedAt || data.createdAt),
     author: data.author || "Simcoe County Turkish Association",
+    authorId: data.authorId || "",
     readMinutes: data.readMinutes || estimateReadMinutes(body),
     contentType: data.contentType === "announcement" ? "announcement" : "news",
     status: data.status || "published",
@@ -100,6 +104,8 @@ function normalizeEvent(id: string, data: Record<string, any>): PublicEvent {
     registrationDeadline: data.registrationDeadline ? toDate(data.registrationDeadline) : null,
     price: typeof data.price === "number" ? data.price : 0,
     status: data.status || "upcoming",
+    author: data.author || "Simcoe County Turkish Association",
+    authorId: data.authorId || "",
     publishStatus: data.publishStatus || "published",
     publishedAt: data.publishedAt ? toDate(data.publishedAt) : null,
     scheduledAt
@@ -158,4 +164,14 @@ export async function listAdminNews(max = 100) {
 export async function listAdminEvents(max = 100) {
   const snapshot = await getAdminDb().collection("events").orderBy("createdAt", "desc").limit(max).get();
   return snapshot.docs.map((doc) => normalizeEvent(doc.id, doc.data()));
+}
+
+export async function getAdminNewsById(id: string) {
+  const snapshot = await getAdminDb().collection("news").doc(id).get();
+  return snapshot.exists ? normalizeNews(snapshot.id, snapshot.data() || {}) : null;
+}
+
+export async function getAdminEventById(id: string) {
+  const snapshot = await getAdminDb().collection("events").doc(id).get();
+  return snapshot.exists ? normalizeEvent(snapshot.id, snapshot.data() || {}) : null;
 }
