@@ -14,16 +14,18 @@ type NewsCardProps = {
     publishedAt: Date;
     readMinutes?: number;
   };
+  basePath?: string;
 };
 
 /** News preview card with image, category and reading metadata. */
-export function NewsCard({ article }: NewsCardProps) {
+export function NewsCard({ article, basePath = "/news" }: NewsCardProps) {
   const format = useFormatter();
   const t = useTranslations("common");
+  const href = `${basePath}/${article.slug}`;
 
   return (
     <Card className="overflow-hidden">
-      <Link href={`/news/${article.slug}`} aria-label={`${article.title} haberini oku`}>
+      <Link href={href} aria-label={article.title}>
         <div className="relative aspect-[16/10]">
           <Image src={article.coverImage} alt={article.title} fill className="object-cover" sizes="(min-width: 1024px) 33vw, 100vw" />
         </div>
@@ -33,7 +35,7 @@ export function NewsCard({ article }: NewsCardProps) {
           <Badge>{article.category}</Badge>
           <span className="text-xs text-muted-foreground">{t("readMinutes", { minutes: article.readMinutes || 4 })}</span>
         </div>
-        <Link href={`/news/${article.slug}`}>
+        <Link href={href}>
           <h3 className="mt-4 font-heading text-2xl leading-tight text-secondary hover:text-primary">{article.title}</h3>
         </Link>
         <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">{article.excerpt}</p>

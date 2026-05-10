@@ -121,14 +121,14 @@ function isVisiblePublished(data: Record<string, any>, now = new Date()) {
   return true;
 }
 
-export async function listPublishedNews(locale: string, max = 24) {
+export async function listPublishedNews(locale: string, max = 24): Promise<PublicNewsArticle[]> {
   try {
     const snapshot = await getAdminDb().collection("news").orderBy("publishedAt", "desc").limit(max).get();
     const articles = snapshot.docs.filter((doc) => isVisiblePublished(doc.data())).map((doc) => normalizeNews(doc.id, doc.data()));
-    return articles.length ? articles : getDemoNews(locale);
+    return articles.length ? articles : (getDemoNews(locale) as unknown as PublicNewsArticle[]);
   } catch (error) {
     console.error("Unable to load Firestore news.", error);
-    return getDemoNews(locale);
+    return getDemoNews(locale) as unknown as PublicNewsArticle[];
   }
 }
 
@@ -156,9 +156,30 @@ export async function getEventBySlug(locale: string, slug: string) {
   return events.find((item) => item.slug === slug) || null;
 }
 
+export async function listPublishedAnnouncements(locale: string, max = 24) {
+  try {
+    const snapshot = await getAdminDb().collection("news").where("contentType", "==", "announcement").limit(max * 2).get();
+    return snapshot.docs
+      .filter((doc) => isVisiblePublished(doc.data()))
+      .map((doc) => normalizeNews(doc.id, doc.data()))
+      .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
+      .slice(0, max);
+  } catch (error) {
+    console.error("Unable to load Firestore announcements.", error);
+    return [];
+  }
+}
+
 export async function listAdminNews(max = 100) {
   const snapshot = await getAdminDb().collection("news").orderBy("createdAt", "desc").limit(max).get();
   return snapshot.docs.map((doc) => normalizeNews(doc.id, doc.data()));
+}
+
+export async function listAdminAnnouncements(max = 100) {
+  const snapshot = await getAdminDb().collection("news").where("contentType", "==", "announcement").limit(max).get();
+  return snapshot.docs
+    .map((doc) => normalizeNews(doc.id, doc.data()))
+    .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
 }
 
 export async function listAdminEvents(max = 100) {

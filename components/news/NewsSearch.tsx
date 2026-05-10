@@ -9,9 +9,15 @@ import { NewsGrid } from "@/components/news/NewsGrid";
 
 type Article = React.ComponentProps<typeof NewsGrid>["articles"][number];
 
-/** Client-side Fuse.js search and category filtering for news. */
-export function NewsSearch({ articles }: { articles: Article[] }) {
-  const t = useTranslations("news");
+type NewsSearchProps = {
+  articles: Article[];
+  namespace?: "news" | "announcements";
+  basePath?: string;
+};
+
+/** Client-side Fuse.js search and category filtering for news and announcements. */
+export function NewsSearch({ articles, namespace = "news", basePath }: NewsSearchProps) {
+  const t = useTranslations(namespace);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const categories = ["all", ...Array.from(new Set(articles.map((item) => item.category)))];
@@ -30,7 +36,7 @@ export function NewsSearch({ articles }: { articles: Article[] }) {
           ))}
         </Select>
       </div>
-      <NewsGrid articles={filtered} />
+      <NewsGrid articles={filtered} basePath={basePath} />
     </div>
   );
 }

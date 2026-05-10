@@ -5,6 +5,7 @@
     "home": "Simcoe County Turkish Association",
     "about": "Hakkımızda",
     "news": "Haberler",
+    "announcements": "Duyurular",
     "events": "Etkinlikler",
     "membership": "Üyelik",
     "donate": "Bağış",
@@ -23,6 +24,7 @@
     "logoAlt": "Simcoe County Turkish Association logosu",
     "about": "Hakkımızda",
     "news": "Haberler",
+    "announcements": "Duyurular",
     "events": "Etkinlikler",
     "guide": "Yeni Gelenler",
     "membership": "Üyelik",
@@ -103,6 +105,14 @@
     "shareLinkedin": "LinkedIn'de paylaş",
     "shareEmail": "E-posta ile paylaş",
     "notFound": "Haber bulunamadı"
+  },
+  "announcements": {
+    "eyebrow": "Duyurular",
+    "title": "Dernek duyuruları",
+    "search": "Başlık veya özet ara",
+    "allCategories": "Tüm kategoriler",
+    "details": "Detaylar",
+    "notFound": "Duyuru bulunamadı"
   },
   "events": {
     "eyebrow": "Etkinlikler",
@@ -265,6 +275,7 @@
   "admin": {
     "overview": "Genel Bakış",
     "news": "Haberler",
+    "announcements": "Duyurular",
     "events": "Etkinlikler",
     "members": "Üyeler",
     "guide": "Rehber",

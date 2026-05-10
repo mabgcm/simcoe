@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/components/admin/DataTable";
 import { ContentActions } from "@/components/admin/ContentActions";
-import { listAdminNews } from "@/lib/content";
+import { listAdminAnnouncements } from "@/lib/content";
 import { getCurrentAdmin } from "@/lib/admin-session";
 
 function statusBadge(status?: string, scheduledAt?: Date | null) {
@@ -18,19 +18,18 @@ function dateLabel(status?: string, publishedAt?: Date | null, scheduledAt?: Dat
   return "-";
 }
 
-export default async function AdminNewsPage() {
-  const [allNews, admin] = await Promise.all([listAdminNews(), getCurrentAdmin()]);
-  const news = allNews.filter((item) => item.contentType !== "announcement");
+export default async function AdminAnnouncementsPage() {
+  const [announcements, admin] = await Promise.all([listAdminAnnouncements(), getCurrentAdmin()]);
   return (
     <section>
       <div className="flex items-center justify-between">
-        <h1 className="font-heading text-4xl text-secondary">Haberler</h1>
+        <h1 className="font-heading text-4xl text-secondary">Duyurular</h1>
         <Button asChild><Link href="/admin/content/new">Yeni İçerik</Link></Button>
       </div>
       <div className="mt-6">
         <DataTable
           columns={["Başlık", "Kategori", "Oluşturan", "Yayın / Zamanlama Tarihi", "Durum", "İşlemler"]}
-          rows={news.map((item) => ({
+          rows={announcements.map((item) => ({
             Başlık: item.title,
             Kategori: item.category,
             Oluşturan: item.author,

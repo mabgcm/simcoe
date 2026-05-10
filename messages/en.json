@@ -5,6 +5,7 @@
     "home": "Simcoe County Turkish Association",
     "about": "About",
     "news": "News",
+    "announcements": "Announcements",
     "events": "Events",
     "membership": "Membership",
     "donate": "Donate",
@@ -23,6 +24,7 @@
     "logoAlt": "Simcoe County Turkish Association logo",
     "about": "About",
     "news": "News",
+    "announcements": "Announcements",
     "events": "Events",
     "guide": "Newcomers",
     "membership": "Membership",
@@ -103,6 +105,14 @@
     "shareLinkedin": "Share on LinkedIn",
     "shareEmail": "Share by email",
     "notFound": "News article not found"
+  },
+  "announcements": {
+    "eyebrow": "Announcements",
+    "title": "Association announcements",
+    "search": "Search title or summary",
+    "allCategories": "All categories",
+    "details": "Details",
+    "notFound": "No announcements found"
   },
   "events": {
     "eyebrow": "Events",
@@ -265,6 +275,7 @@
   "admin": {
     "overview": "Overview",
     "news": "News",
+    "announcements": "Announcements",
     "events": "Events",
     "members": "Members",
     "guide": "Guide",

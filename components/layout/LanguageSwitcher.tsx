@@ -23,12 +23,12 @@ export function LanguageSwitcher() {
   }
 
   return (
-    <div className="flex items-center rounded-lg border bg-white p-1 text-xs font-bold" aria-label="Language">
-      <button type="button" className={cn("rounded-md px-2 py-1", locale === "tr" ? "bg-primary text-white" : "text-secondary")} onClick={() => switchLocale("tr")}>
-        TR
+    <div className="flex items-center rounded-lg border bg-white p-1" aria-label="Language">
+      <button type="button" className={cn("rounded-md px-1.5 py-1 text-lg leading-none", locale === "tr" ? "bg-primary/10 ring-1 ring-primary/30" : "opacity-60 hover:opacity-100")} onClick={() => switchLocale("tr")} aria-label="Türkçe">
+        🇹🇷
       </button>
-      <button type="button" className={cn("rounded-md px-2 py-1", locale === "en" ? "bg-primary text-white" : "text-secondary")} onClick={() => switchLocale("en")}>
-        EN
+      <button type="button" className={cn("rounded-md px-1.5 py-1 text-lg leading-none", locale === "en" ? "bg-primary/10 ring-1 ring-primary/30" : "opacity-60 hover:opacity-100")} onClick={() => switchLocale("en")} aria-label="English">
+        🇨🇦
       </button>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, UserRound } from "lucide-react";
+import { LogIn, LogOut, Menu, UserRound } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ export function Navbar() {
   const links = [
     { href: "/about", label: t("about") },
     { href: "/news", label: t("news") },
+    { href: "/announcements", label: t("announcements") },
     { href: "/events", label: t("events") },
     { href: "/newcomers-guide", label: t("guide") },
     { href: "/membership", label: t("membership") },
@@ -60,22 +61,21 @@ export function Navbar() {
         <div className="hidden items-center gap-2 lg:flex">
           <LanguageSwitcher />
           {user ? (
-            <>
-              <span className="text-sm font-semibold text-secondary">{t("welcome", { name: displayName })}</span>
-              <Button variant="ghost" size="sm" onClick={handleLogout}>
-                {t("logout")}
-              </Button>
-            </>
+            <Button variant="ghost" size="icon" onClick={handleLogout} aria-label={t("logout")}>
+              <LogOut className="h-4 w-4" />
+            </Button>
           ) : (
             <>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/login">
-                  <UserRound className="h-4 w-4" />
-                  {t("login")}
+              <Button asChild variant="ghost" size="icon">
+                <Link href="/login" aria-label={t("login")}>
+                  <LogIn className="h-4 w-4" />
                 </Link>
               </Button>
               <Button asChild size="sm">
-                <Link href="/register">{t("register")}</Link>
+                <Link href="/register">
+                  <UserRound className="h-4 w-4" />
+                  {t("register")}
+                </Link>
               </Button>
             </>
           )}
@@ -86,6 +86,13 @@ export function Navbar() {
           </Button>
         </MobileNav>
       </div>
+      {user && (
+        <div className="hidden border-t bg-muted/40 lg:block">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <p className="py-1.5 text-xs font-semibold text-secondary/70">{t("welcome", { name: displayName })}</p>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

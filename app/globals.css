@@ -49,10 +49,105 @@ textarea {
 }
 
 @keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
+
+/* ─── react-big-calendar overrides ─────────────────────────────────────── */
+.sta-calendar { height: 100%; }
+
+.sta-calendar .rbc-month-view,
+.sta-calendar .rbc-time-view,
+.sta-calendar .rbc-agenda-view { border: none; }
+
+.sta-calendar .rbc-header {
+  padding: 8px 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #667085;
+  border-bottom-color: hsl(210 16% 92%);
+}
+
+.sta-calendar .rbc-month-row,
+.sta-calendar .rbc-day-bg { border-color: hsl(210 16% 92%); }
+
+.sta-calendar .rbc-today { background-color: #fdf2f1; }
+.sta-calendar .rbc-off-range-bg { background-color: #f9fafb; }
+
+.sta-calendar .rbc-date-cell {
+  padding: 4px 8px;
+  font-size: 0.82rem;
+  color: #1a1a2e;
+}
+.sta-calendar .rbc-date-cell.rbc-off-range { color: #adb5bd; }
+
+/* Today circle */
+.sta-calendar .rbc-date-cell.rbc-now > .rbc-button-link {
+  background-color: #c0392b;
+  color: #fff;
+  border-radius: 9999px;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Events */
+.sta-calendar .sta-event {
+  background-color: #c0392b !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 2px 6px !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  color: #fff !important;
+}
+.sta-calendar .rbc-event.rbc-selected,
+.sta-calendar .sta-event.rbc-selected { background-color: #922b21 !important; }
+.sta-calendar .rbc-event:focus { outline: 2px solid #c0392b; outline-offset: 2px; }
+
+.sta-calendar .rbc-show-more {
+  color: #c0392b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: none;
+  padding-left: 4px;
+}
+
+/* Time/week/day views */
+.sta-calendar .rbc-time-header-content,
+.sta-calendar .rbc-time-content { border-color: hsl(210 16% 92%); }
+
+.sta-calendar .rbc-time-slot {
+  font-size: 0.72rem;
+  color: #667085;
+  border-color: hsl(210 16% 92%);
+}
+.sta-calendar .rbc-timeslot-group { border-color: hsl(210 16% 92%); }
+.sta-calendar .rbc-current-time-indicator { background-color: #c0392b; height: 2px; }
+
+/* Agenda view */
+.sta-calendar .rbc-agenda-view table.rbc-agenda-table { border: none; border-collapse: separate; border-spacing: 0; }
+.sta-calendar .rbc-agenda-view table.rbc-agenda-table thead > tr > th {
+  padding: 8px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #667085;
+  background: #f9fafb;
+  border-bottom: 1px solid hsl(210 16% 92%);
+}
+.sta-calendar .rbc-agenda-view table.rbc-agenda-table tbody > tr > td {
+  padding: 10px 12px;
+  border-bottom: 1px solid hsl(210 16% 92%);
+  font-size: 0.875rem;
+}
+.sta-calendar .rbc-agenda-date-cell { font-weight: 700; color: #1a1a2e; white-space: nowrap; }
+.sta-calendar .rbc-agenda-time-cell { color: #667085; white-space: nowrap; }
+.sta-calendar .rbc-agenda-event-cell { font-weight: 600; color: #c0392b; cursor: pointer; }
+.sta-calendar .rbc-agenda-empty { padding: 24px; text-align: center; color: #667085; }
