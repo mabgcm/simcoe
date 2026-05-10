@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase/admin";
 
+export const dynamic = "force-dynamic";
+
 /** Returns approved comments for a published member post (public). */
 export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -30,7 +32,9 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
       })
       .sort((a, b) => (a.createdAt ?? "") < (b.createdAt ?? "") ? -1 : 1);
 
-    return NextResponse.json({ comments });
+    const response = NextResponse.json({ comments });
+    response.headers.set("Cache-Control", "no-store");
+    return response;
   } catch {
     return NextResponse.json({ comments: [] });
   }
