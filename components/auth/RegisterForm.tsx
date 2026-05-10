@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { GoogleIcon } from "@/components/ui/google-icon";
 import { Input } from "@/components/ui/input";
 import { db } from "@/lib/firebase/config";
 import { loginWithGoogle, registerWithEmail } from "@/lib/firebase/auth";
@@ -121,7 +122,10 @@ export function RegisterForm() {
         {form.formState.errors.terms ? <p className="text-sm text-red-600">{form.formState.errors.terms.message}</p> : null}
         <Button>{t("registerButton")}</Button>
       </form>
-      <Button className="mt-3 w-full" variant="outline" onClick={google}>{t("googleRegister")}</Button>
+      <Button className="mt-3 w-full gap-2" variant="outline" onClick={google}>
+        <GoogleIcon />
+        {t("googleRegister")}
+      </Button>
       <p className="mt-4 text-sm text-muted-foreground">
         {t("haveAccount")} <Link href="/login" className="text-primary">{t("loginLink")}</Link>
       </p>

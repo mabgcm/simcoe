@@ -1,0 +1,140 @@
+import { Timestamp } from "firebase-admin/firestore";
+import { getAdminDb } from "@/lib/firebase/admin";
+import { getEvents as getDemoEvents, getNews as getDemoNews } from "@/lib/demo-data";
+
+export type PublicNewsArticle = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  content: string;
+  category: string;
+  coverImage: string;
+  publishedAt: Date;
+  author: string;
+  readMinutes: number;
+  contentType?: "news" | "announcement";
+};
+
+export type PublicEvent = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  conditions: string;
+  location: string;
+  address: string;
+  startDate: Date;
+  endDate: Date;
+  coverImage: string;
+  gallery: string[];
+  category: string;
+  capacity: number | null;
+  registrationRequired: boolean;
+  registrationDeadline: Date | null;
+  price: number;
+  status: "upcoming" | "ongoing" | "past" | "cancelled";
+};
+
+function toDate(value: unknown, fallback = new Date()) {
+  if (value instanceof Date) return value;
+  if (value instanceof Timestamp) return value.toDate();
+  if (value && typeof value === "object" && "toDate" in value && typeof value.toDate === "function") return value.toDate();
+  if (typeof value === "string" || typeof value === "number") {
+    const date = new Date(value);
+    if (!Number.isNaN(date.getTime())) return date;
+  }
+  return fallback;
+}
+
+function estimateReadMinutes(html: string) {
+  const words = html.replace(/<[^>]*>/g, " ").trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 220));
+}
+
+function normalizeNews(id: string, data: Record<string, any>): PublicNewsArticle {
+  const body = data.body || data.content || "";
+  return {
+    id,
+    title: data.title || "",
+    slug: data.slug || id,
+    excerpt: data.excerpt || "",
+    body,
+    content: body,
+    category: data.category || (data.contentType === "announcement" ? "Duyuru" : "Haber"),
+    coverImage: data.coverImage || data.image || "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80",
+    publishedAt: toDate(data.publishedAt || data.createdAt),
+    author: data.author || "Simcoe County Turkish Association",
+    readMinutes: data.readMinutes || estimateReadMinutes(body),
+    contentType: data.contentType === "announcement" ? "announcement" : "news"
+  };
+}
+
+function normalizeEvent(id: string, data: Record<string, any>): PublicEvent {
+  const startDate = toDate(data.startDate || data.createdAt);
+  return {
+    id,
+    title: data.title || "",
+    slug: data.slug || id,
+    description: data.description || data.content || "",
+    conditions: data.conditions || "",
+    location: data.location || "",
+    address: data.address || data.location || "",
+    startDate,
+    endDate: toDate(data.endDate, startDate),
+    coverImage: data.coverImage || data.image || "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1200&q=80",
+    gallery: Array.isArray(data.gallery) ? data.gallery : [],
+    category: data.category || "Etkinlik",
+    capacity: typeof data.capacity === "number" ? data.capacity : null,
+    registrationRequired: Boolean(data.registrationRequired),
+    registrationDeadline: data.registrationDeadline ? toDate(data.registrationDeadline) : null,
+    price: typeof data.price === "number" ? data.price : 0,
+    status: data.status || "upcoming"
+  };
+}
+
+export async function listPublishedNews(locale: string, max = 24) {
+  try {
+    const snapshot = await getAdminDb().collection("news").where("status", "==", "published").orderBy("publishedAt", "desc").limit(max).get();
+    const articles = snapshot.docs.map((doc) => normalizeNews(doc.id, doc.data()));
+    return articles.length ? articles : getDemoNews(locale);
+  } catch (error) {
+    console.error("Unable to load Firestore news.", error);
+    return getDemoNews(locale);
+  }
+}
+
+export async function getPublishedNewsBySlug(locale: string, slug: string) {
+  const articles = await listPublishedNews(locale, 50);
+  return articles.find((item) => item.slug === slug) || null;
+}
+
+export async function listEvents(locale: string, max = 50) {
+  try {
+    const snapshot = await getAdminDb().collection("events").orderBy("startDate", "asc").limit(max).get();
+    const events = snapshot.docs
+      .filter((doc) => doc.data().publishStatus !== "draft")
+      .map((doc) => normalizeEvent(doc.id, doc.data()))
+      .filter((event) => event.status !== "cancelled");
+    return events.length ? events : getDemoEvents(locale);
+  } catch (error) {
+    console.error("Unable to load Firestore events.", error);
+    return getDemoEvents(locale);
+  }
+}
+
+export async function getEventBySlug(locale: string, slug: string) {
+  const events = await listEvents(locale, 80);
+  return events.find((item) => item.slug === slug) || null;
+}
+
+export async function listAdminNews(max = 100) {
+  const snapshot = await getAdminDb().collection("news").orderBy("createdAt", "desc").limit(max).get();
+  return snapshot.docs.map((doc) => normalizeNews(doc.id, doc.data()));
+}
+
+export async function listAdminEvents(max = 100) {
+  const snapshot = await getAdminDb().collection("events").orderBy("createdAt", "desc").limit(max).get();
+  return snapshot.docs.map((doc) => normalizeEvent(doc.id, doc.data()));
+}

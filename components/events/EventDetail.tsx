@@ -11,6 +11,8 @@ type EventDetailProps = {
     startDate: Date;
     endDate: Date;
     coverImage: string;
+    description?: string;
+    conditions?: string;
     price: number;
     capacity: number | null;
   };
@@ -33,9 +35,13 @@ export function EventDetail({ event }: EventDetailProps) {
       <div className="mx-auto grid max-w-5xl gap-8 px-4 py-10 lg:grid-cols-[1fr_320px]">
         <div className="prose-content rounded-lg bg-white p-6 shadow-sm">
           <h2>{t("detailTitle")}</h2>
-          <p>{t("detailBody")}</p>
-          <h2>{t("conditions")}</h2>
-          <p>{t("conditionsBody")}</p>
+          <div dangerouslySetInnerHTML={{ __html: event.description || `<p>${t("detailBody")}</p>` }} />
+          {event.conditions ? (
+            <>
+              <h2>{t("conditions")}</h2>
+              <p>{event.conditions}</p>
+            </>
+          ) : null}
           <div className="mt-6 aspect-video overflow-hidden rounded-lg border">
             <iframe title={`${event.title} konumu`} src={`https://www.google.com/maps?q=${encodeURIComponent(event.address)}&output=embed`} className="h-full w-full" loading="lazy" />
           </div>

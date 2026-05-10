@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Facebook, Linkedin, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getNews } from "@/lib/demo-data";
+import { getPublishedNewsBySlug } from "@/lib/content";
 import { getMessages, getRequestLocale } from "@/i18n/server";
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const article = getNews(getRequestLocale()).find((item) => item.slug === params.slug);
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const article = await getPublishedNewsBySlug(getRequestLocale(), params.slug);
   return { title: article?.title || "Haber", description: article?.excerpt };
 }
 
@@ -15,7 +15,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 export default async function NewsDetailPage({ params }: { params: { slug: string } }) {
   const locale = getRequestLocale();
   const messages = getMessages(locale);
-  const article = getNews(locale).find((item) => item.slug === params.slug);
+  const article = await getPublishedNewsBySlug(locale, params.slug);
   if (!article) notFound();
 
   return (

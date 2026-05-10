@@ -1,14 +1,11 @@
 import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { EventCard } from "@/components/events/EventCard";
-import { getEvents } from "@/lib/demo-data";
 
 /** Homepage preview of upcoming events. */
-export function EventsPreview() {
+export function EventsPreview({ events }: { events: React.ComponentProps<typeof EventCard>["event"][] }) {
   const t = useTranslations("home");
-  const locale = useLocale();
-  const events = getEvents(locale).slice(0, 3);
 
   return (
     <section className="py-20">

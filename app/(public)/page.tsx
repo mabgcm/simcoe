@@ -7,6 +7,7 @@ import { EventsPreview } from "@/components/sections/EventsPreview";
 import { DonateCallout } from "@/components/sections/DonateCallout";
 import { SponsorsCarousel } from "@/components/sections/SponsorsCarousel";
 import { getMessages, getRequestLocale } from "@/i18n/server";
+import { listEvents, listPublishedNews } from "@/lib/content";
 
 export function generateMetadata(): Metadata {
   const messages = getMessages(getRequestLocale());
@@ -14,13 +15,16 @@ export function generateMetadata(): Metadata {
 }
 
 /** Public homepage with STA sections in the requested order. */
-export default function HomePage() {
-  const t = getMessages(getRequestLocale()).home;
+export default async function HomePage() {
+  const locale = getRequestLocale();
+  const t = getMessages(locale).home;
+  const [articles, events] = await Promise.all([listPublishedNews(locale, 3), listEvents(locale, 3)]);
+
   return (
     <>
       <HeroSection />
-      <NewsPreview />
-      <EventsPreview />
+      <NewsPreview articles={articles.slice(0, 3)} />
+      <EventsPreview events={events.slice(0, 3)} />
       <section className="bg-secondary py-16 text-white">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 px-4 sm:px-6 md:flex-row md:items-center lg:px-8">
           <div>

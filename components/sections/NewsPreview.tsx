@@ -1,14 +1,11 @@
 import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { NewsGrid } from "@/components/news/NewsGrid";
-import { getNews } from "@/lib/demo-data";
 
 /** Homepage preview of the latest published news. */
-export function NewsPreview() {
+export function NewsPreview({ articles }: { articles: React.ComponentProps<typeof NewsGrid>["articles"] }) {
   const t = useTranslations("home");
-  const locale = useLocale();
-  const articles = getNews(locale).slice(0, 3);
 
   return (
     <section className="bg-white py-20">

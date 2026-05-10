@@ -27,17 +27,21 @@ export function Footer() {
   const locale = useLocale();
   const { user } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isMember, setIsMember] = useState(false);
   const [email, setEmail] = useState("");
 
   useEffect(() => {
     async function loadRole() {
       if (!user) {
         setIsAdmin(false);
+        setIsMember(false);
         return;
       }
       const snapshot = await getDoc(doc(db, "users", user.uid));
       const role = snapshot.data()?.role;
-      setIsAdmin(role === "admin" || role === "super_admin");
+      const hasAdminRole = role === "admin" || role === "super_admin";
+      setIsAdmin(hasAdminRole);
+      setIsMember(hasAdminRole || role === "member");
     }
     void loadRole();
   }, [user]);
@@ -104,7 +108,7 @@ export function Footer() {
           <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-white/60">{t("members")}</h3>
           <div className="mt-3 grid gap-2 text-sm">
             <Link href="/membership">{navT("membership")}</Link>
-            <Link href="/portal">{t("portal")}</Link>
+            {isMember ? <Link href="/portal">{t("portal")}</Link> : null}
             {isAdmin ? <Link href="/admin">{t("admin")}</Link> : null}
           </div>
           <h3 className="mt-5 text-sm font-semibold uppercase tracking-[0.16em] text-white/60">{t("legal")}</h3>

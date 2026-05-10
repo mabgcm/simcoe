@@ -7,6 +7,7 @@ export function AdminSidebar() {
   const t = getMessages(getRequestLocale()).admin;
   const adminLinks = [
     { href: "/admin", label: t.overview, icon: Home },
+    { href: "/admin/content/new", label: "Yeni İçerik", icon: FileText },
     { href: "/admin/news", label: t.news, icon: Newspaper },
     { href: "/admin/events", label: t.events, icon: Calendar },
     { href: "/admin/members", label: t.members, icon: Users },

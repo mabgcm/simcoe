@@ -10,6 +10,7 @@ import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import type { User } from "firebase/auth";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { GoogleIcon } from "@/components/ui/google-icon";
 import { Input } from "@/components/ui/input";
 import { loginWithEmail, loginWithGoogle } from "@/lib/firebase/auth";
 import { authErrorKey } from "@/lib/firebase/errors";
@@ -97,7 +98,10 @@ export function LoginForm() {
         <Input placeholder={t("password")} type="password" {...form.register("password")} />
         <Button>{t("loginButton")}</Button>
       </form>
-      <Button className="mt-3 w-full" variant="outline" onClick={google}>{t("googleLogin")}</Button>
+      <Button className="mt-3 w-full gap-2" variant="outline" onClick={google}>
+        <GoogleIcon />
+        {t("googleLogin")}
+      </Button>
       <div className="mt-4 flex justify-between text-sm">
         <Link href="/register" className="text-primary">{t("registerLink")}</Link>
         <Link href="/forgot-password" className="text-primary">{t("forgotLink")}</Link>
