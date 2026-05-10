@@ -1,5 +1,5 @@
 export function membershipWelcomeTemplate(name: string) {
-  return `<p>Merhaba ${name},</p><p>Simcoe Turkish Association üyeliğiniz aktif edildi. Topluluğumuza hoş geldiniz.</p>`;
+  return `<p>Merhaba ${name},</p><p>Simcoe County Turkish Association üyeliğiniz aktif edildi. Topluluğumuza hoş geldiniz.</p>`;
 }
 
 export function paymentFailedTemplate() {
@@ -7,5 +7,5 @@ export function paymentFailedTemplate() {
 }
 
 export function donationReceiptTemplate(name: string, amount: number) {
-  return `<p>Merhaba ${name},</p><p>Simcoe Turkish Association'a yaptığınız $${amount.toFixed(2)} CAD bağış için teşekkür ederiz.</p>`;
+  return `<p>Merhaba ${name},</p><p>Simcoe County Turkish Association'a yaptığınız $${amount.toFixed(2)} CAD bağış için teşekkür ederiz.</p>`;
 }

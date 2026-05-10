@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -39,7 +40,10 @@ export function MobileNav({ links, children }: MobileNavProps) {
       {open ? (
         <div className="fixed inset-0 z-50 bg-white px-4 py-4">
           <div className="flex items-center justify-between">
-            <span className="font-heading text-xl font-bold text-secondary">STA</span>
+            <div className="flex items-center gap-3">
+              <Image src="/images/logo.png" alt={t("logoAlt")} width={44} height={44} className="h-11 w-11 rounded-lg object-contain" />
+              <span className="font-heading text-lg font-bold leading-tight text-secondary">{t("brandName")}</span>
+            </div>
             <Button variant="ghost" size="icon" aria-label={t("closeMenu")} onClick={() => setOpen(false)}>
               <X className="h-5 w-5" />
             </Button>

@@ -15,13 +15,18 @@ const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrai
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_URL || "http://localhost:3000"),
   title: {
-    default: "Simcoe Turkish Association",
-    template: "%s | Simcoe Turkish Association"
+    default: "Simcoe County Turkish Association",
+    template: "%s | Simcoe County Turkish Association"
   },
-  description: "Simcoe Turkish Association community platform for members, events, newcomers, sponsors and donations.",
+  description: "Simcoe County Turkish Association community platform for members, events, newcomers, sponsors and donations.",
+  icons: {
+    icon: "/images/logo.png",
+    apple: "/images/logo.png"
+  },
   openGraph: {
-    title: "Simcoe Turkish Association",
+    title: "Simcoe County Turkish Association",
     description: "Community, culture and support for Turkish Canadians in Simcoe County.",
+    images: ["/images/logo.png"],
     type: "website"
   },
   twitter: {

@@ -1,8 +1,8 @@
 {
   "meta": {
-    "defaultTitle": "Simcoe Turkish Association",
-    "description": "The Simcoe Turkish Association community platform for members, events, newcomers, sponsors and donations.",
-    "home": "Simcoe Turkish Association",
+    "defaultTitle": "Simcoe County Turkish Association",
+    "description": "The Simcoe County Turkish Association community platform for members, events, newcomers, sponsors and donations.",
+    "home": "Simcoe County Turkish Association",
     "about": "About",
     "news": "News",
     "events": "Events",
@@ -19,6 +19,8 @@
     "portal": "Member Portal"
   },
   "nav": {
+    "brandName": "Simcoe County Turkish Association",
+    "logoAlt": "Simcoe County Turkish Association logo",
     "about": "About",
     "news": "News",
     "events": "Events",
@@ -31,9 +33,11 @@
     "register": "Join",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "homeLabel": "Simcoe Turkish Association home"
+    "homeLabel": "Simcoe County Turkish Association home"
   },
   "footer": {
+    "brandName": "Simcoe County Turkish Association",
+    "logoAlt": "Simcoe County Turkish Association logo",
     "tagline": "A community platform strengthening Turkish culture, mutual support and newcomer resources in Simcoe County.",
     "platform": "Platform",
     "members": "Members",
@@ -48,11 +52,11 @@
     "newsletterButton": "Subscribe",
     "newsletterSuccess": "You are subscribed to the newsletter.",
     "newsletterError": "Subscription could not be saved.",
-    "copyright": "© 2026 Simcoe Turkish Association. All rights reserved."
+    "copyright": "© 2026 Simcoe County Turkish Association. All rights reserved."
   },
   "home": {
     "eyebrow": "Simcoe County",
-    "title": "Simcoe Turkish Association",
+    "title": "Simcoe County Turkish Association",
     "subtitle": "A community platform that keeps culture alive, guides newcomers and connects members through a strong support network.",
     "join": "Become a Member",
     "events": "View Events",
@@ -214,8 +218,8 @@
     "privacyTitle": "Privacy Policy",
     "termsTitle": "Terms of Service",
     "updated": "Last updated: May 9, 2026",
-    "privacyBody": ["Simcoe Turkish Association processes personal information only for membership, event registration, communication and community services.", "Collected information may include name, email, phone, membership plan, event participation details and messages shared voluntarily.", "Data is stored securely in Firebase and selected service providers. Role-based access and security rules are used to prevent unauthorized access.", "You may contact us to request correction or deletion of your personal information."],
-    "termsBody": ["By using this website, you agree to follow the Simcoe Turkish Association platform rules.", "Content shared in the member portal must be respectful, accurate and supportive of community safety.", "The association reserves the right to remove inappropriate content and limit account access when necessary.", "Events, memberships and announcements may be updated by the association board."]
+    "privacyBody": ["Simcoe County Turkish Association processes personal information only for membership, event registration, communication and community services.", "Collected information may include name, email, phone, membership plan, event participation details and messages shared voluntarily.", "Data is stored securely in Firebase and selected service providers. Role-based access and security rules are used to prevent unauthorized access.", "You may contact us to request correction or deletion of your personal information."],
+    "termsBody": ["By using this website, you agree to follow the Simcoe County Turkish Association platform rules.", "Content shared in the member portal must be respectful, accurate and supportive of community safety.", "The association reserves the right to remove inappropriate content and limit account access when necessary.", "Events, memberships and announcements may be updated by the association board."]
   },
   "gallery": {
     "eyebrow": "Gallery",
@@ -225,7 +229,7 @@
   "about": {
     "eyebrow": "About",
     "title": "A strong Turkish community in Simcoe",
-    "intro": "Simcoe Turkish Association is an independent community organization working to preserve cultural heritage, support newcomers and build lasting solidarity among members.",
+    "intro": "Simcoe County Turkish Association is an independent community organization working to preserve cultural heritage, support newcomers and build lasting solidarity among members.",
     "missionTitle": "Mission",
     "mission": "To bring the Turkish community in Simcoe together through culture, education, support and volunteerism.",
     "visionTitle": "Vision",

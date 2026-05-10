@@ -16,8 +16,8 @@ const newsSource = [
       en: "Families, volunteers and newcomers met for a cultural program and community breakfast."
     },
     body: {
-      tr: "<p>Simcoe Turkish Association bahar buluşması, bölgedeki aileleri ve yeni gelen üyeleri aynı masada bir araya getirdi.</p><p>Programda çocuk etkinlikleri, gönüllü tanışmaları ve yaklaşan projeler için kısa bilgilendirmeler yer aldı.</p><p>Yönetim ekibi, 2026 takviminin kültürel etkinlikler ve rehberlik çalışmalarıyla genişleyeceğini paylaştı.</p>",
-      en: "<p>The Simcoe Turkish Association spring meetup brought local families and newcomers together around one table.</p><p>The program included children's activities, volunteer introductions and short updates on upcoming projects.</p><p>The board shared that the 2026 calendar will expand with cultural events and newcomer support programs.</p>"
+      tr: "<p>Simcoe County Turkish Association bahar buluşması, bölgedeki aileleri ve yeni gelen üyeleri aynı masada bir araya getirdi.</p><p>Programda çocuk etkinlikleri, gönüllü tanışmaları ve yaklaşan projeler için kısa bilgilendirmeler yer aldı.</p><p>Yönetim ekibi, 2026 takviminin kültürel etkinlikler ve rehberlik çalışmalarıyla genişleyeceğini paylaştı.</p>",
+      en: "<p>The Simcoe County Turkish Association spring meetup brought local families and newcomers together around one table.</p><p>The program included children's activities, volunteer introductions and short updates on upcoming projects.</p><p>The board shared that the 2026 calendar will expand with cultural events and newcomer support programs.</p>"
     },
     category: { tr: "Topluluk", en: "Community" },
     coverImage: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80",

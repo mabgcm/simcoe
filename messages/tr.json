@@ -1,8 +1,8 @@
 {
   "meta": {
-    "defaultTitle": "Simcoe Turkish Association",
-    "description": "Simcoe Turkish Association üyeler, etkinlikler, yeni gelenler, sponsorlar ve bağışlar için topluluk platformu.",
-    "home": "Simcoe Turkish Association",
+    "defaultTitle": "Simcoe County Turkish Association",
+    "description": "Simcoe County Turkish Association üyeler, etkinlikler, yeni gelenler, sponsorlar ve bağışlar için topluluk platformu.",
+    "home": "Simcoe County Turkish Association",
     "about": "Hakkımızda",
     "news": "Haberler",
     "events": "Etkinlikler",
@@ -19,6 +19,8 @@
     "portal": "Üye Portalı"
   },
   "nav": {
+    "brandName": "Simcoe County Turkish Association",
+    "logoAlt": "Simcoe County Turkish Association logosu",
     "about": "Hakkımızda",
     "news": "Haberler",
     "events": "Etkinlikler",
@@ -31,9 +33,11 @@
     "register": "Üye Ol",
     "openMenu": "Menüyü aç",
     "closeMenu": "Menüyü kapat",
-    "homeLabel": "Simcoe Turkish Association anasayfa"
+    "homeLabel": "Simcoe County Turkish Association anasayfa"
   },
   "footer": {
+    "brandName": "Simcoe County Turkish Association",
+    "logoAlt": "Simcoe County Turkish Association logosu",
     "tagline": "Simcoe County'de Türk kültürünü, dayanışmayı ve yeni gelenlere desteği güçlendiren topluluk platformu.",
     "platform": "Platform",
     "members": "Üyeler",
@@ -48,11 +52,11 @@
     "newsletterButton": "Abone Ol",
     "newsletterSuccess": "Bültene abone oldunuz.",
     "newsletterError": "Abonelik kaydedilemedi.",
-    "copyright": "© 2026 Simcoe Turkish Association. Tüm hakları saklıdır."
+    "copyright": "© 2026 Simcoe County Turkish Association. Tüm hakları saklıdır."
   },
   "home": {
     "eyebrow": "Simcoe County",
-    "title": "Simcoe Turkish Association",
+    "title": "Simcoe County Turkish Association",
     "subtitle": "Kültürü yaşatan, yeni gelenlere yol gösteren ve üyelerini güçlü bir dayanışma ağıyla buluşturan topluluk platformu.",
     "join": "Üye Ol",
     "events": "Etkinlikleri Gör",
@@ -214,8 +218,8 @@
     "privacyTitle": "Gizlilik ve KVKK Politikası",
     "termsTitle": "Kullanım Şartları",
     "updated": "Son güncelleme: 9 Mayıs 2026",
-    "privacyBody": ["Simcoe Turkish Association, üyelerinin ve ziyaretçilerinin kişisel verilerini yalnızca üyelik, etkinlik kaydı, iletişim ve topluluk hizmetleri amacıyla işler.", "Toplanan veriler ad, e-posta, telefon, üyelik planı, etkinlik katılım bilgileri ve gönüllü olarak paylaşılan mesajlardan oluşabilir.", "Veriler Firebase ve seçilen hizmet sağlayıcılarında güvenli şekilde saklanır. Yetkisiz erişimi önlemek için rol tabanlı erişim ve güvenlik kuralları uygulanır.", "Kişisel verilerinizin düzeltilmesini veya silinmesini istemek için bizimle iletişime geçebilirsiniz."],
-    "termsBody": ["Bu web sitesini kullanarak Simcoe Turkish Association platform kurallarına uymayı kabul edersiniz.", "Üye portalında paylaşılan içerikler saygılı, doğru ve topluluk güvenliğini destekleyen nitelikte olmalıdır.", "Dernek, uygunsuz içerikleri kaldırma ve gerekli durumlarda hesap erişimini sınırlama hakkını saklı tutar.", "Etkinlikler, üyelikler ve duyurular dernek yönetimi tarafından güncellenebilir."]
+    "privacyBody": ["Simcoe County Turkish Association, üyelerinin ve ziyaretçilerinin kişisel verilerini yalnızca üyelik, etkinlik kaydı, iletişim ve topluluk hizmetleri amacıyla işler.", "Toplanan veriler ad, e-posta, telefon, üyelik planı, etkinlik katılım bilgileri ve gönüllü olarak paylaşılan mesajlardan oluşabilir.", "Veriler Firebase ve seçilen hizmet sağlayıcılarında güvenli şekilde saklanır. Yetkisiz erişimi önlemek için rol tabanlı erişim ve güvenlik kuralları uygulanır.", "Kişisel verilerinizin düzeltilmesini veya silinmesini istemek için bizimle iletişime geçebilirsiniz."],
+    "termsBody": ["Bu web sitesini kullanarak Simcoe County Turkish Association platform kurallarına uymayı kabul edersiniz.", "Üye portalında paylaşılan içerikler saygılı, doğru ve topluluk güvenliğini destekleyen nitelikte olmalıdır.", "Dernek, uygunsuz içerikleri kaldırma ve gerekli durumlarda hesap erişimini sınırlama hakkını saklı tutar.", "Etkinlikler, üyelikler ve duyurular dernek yönetimi tarafından güncellenebilir."]
   },
   "gallery": {
     "eyebrow": "Galeri",
@@ -225,7 +229,7 @@
   "about": {
     "eyebrow": "Hakkımızda",
     "title": "Simcoe'de güçlü bir Türk topluluğu",
-    "intro": "Simcoe Turkish Association, kültürel mirası yaşatmak, yeni gelenleri desteklemek ve üyeler arasında kalıcı dayanışma kurmak için çalışan bağımsız bir topluluk kuruluşudur.",
+    "intro": "Simcoe County Turkish Association, kültürel mirası yaşatmak, yeni gelenleri desteklemek ve üyeler arasında kalıcı dayanışma kurmak için çalışan bağımsız bir topluluk kuruluşudur.",
     "missionTitle": "Misyon",
     "mission": "Simcoe bölgesindeki Türk toplumunu kültür, eğitim, dayanışma ve gönüllülük etrafında bir araya getirmek.",
     "visionTitle": "Vizyon",

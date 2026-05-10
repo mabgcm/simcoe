@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, UserRound } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -38,8 +39,8 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3" aria-label={t("homeLabel")}>
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary font-heading text-lg font-bold text-white">ST</span>
-          <span className="hidden font-heading text-xl font-bold text-secondary sm:block">Simcoe Turkish Association</span>
+          <Image src="/images/logo.png" alt={t("logoAlt")} width={44} height={44} className="h-11 w-11 rounded-lg object-contain" priority />
+          <span className="hidden max-w-[280px] font-heading text-xl font-bold leading-tight text-secondary sm:block">{t("brandName")}</span>
         </Link>
         <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary navigation">
           {links.map((link) => (
