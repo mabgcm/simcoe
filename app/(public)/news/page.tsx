@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { NewsSearch } from "@/components/news/NewsSearch";
+import { MemberPostCTA } from "@/components/news/MemberPostCTA";
 import { listPublishedNews } from "@/lib/content";
 import { getMessages, getRequestLocale } from "@/i18n/server";
 
@@ -16,8 +17,13 @@ export default async function NewsPage() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">{messages.news.eyebrow}</p>
-      <h1 className="mt-3 font-heading text-5xl text-secondary">{messages.news.title}</h1>
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">{messages.news.eyebrow}</p>
+          <h1 className="mt-3 font-heading text-5xl text-secondary">{messages.news.title}</h1>
+        </div>
+        <MemberPostCTA type="news" />
+      </div>
       <div className="mt-8">
         <NewsSearch articles={articles} />
       </div>

@@ -61,9 +61,17 @@ export function Navbar() {
         <div className="hidden items-center gap-2 lg:flex">
           <LanguageSwitcher />
           {user ? (
-            <Button variant="ghost" size="icon" onClick={handleLogout} aria-label={t("logout")}>
-              <LogOut className="h-4 w-4" />
-            </Button>
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/portal">
+                  <UserRound className="h-4 w-4" />
+                  {t("portal")}
+                </Link>
+              </Button>
+              <Button variant="ghost" size="icon" onClick={handleLogout} aria-label={t("logout")}>
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </>
           ) : (
             <>
               <Button asChild variant="ghost" size="icon">

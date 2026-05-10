@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,8 +17,10 @@ type ContentType = "news" | "announcement";
 /** Form for active members to submit content for admin approval. */
 export function MemberPostForm({ authorName, authorPhotoURL }: { authorName: string; authorPhotoURL: string }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
-  const [contentType, setContentType] = useState<ContentType>("news");
+  const initialType = searchParams.get("type") === "announcement" ? "announcement" : "news";
+  const [contentType, setContentType] = useState<ContentType>(initialType);
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [category, setCategory] = useState("");
