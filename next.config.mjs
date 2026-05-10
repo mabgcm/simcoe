@@ -6,9 +6,8 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 const nextConfig = {
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "firebasestorage.googleapis.com" },
-      { protocol: "https", hostname: "ui-avatars.com" }
+      { protocol: "https", hostname: "**" },
+      { protocol: "http", hostname: "**" }
     ]
   }
 };
