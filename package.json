@@ -2,13 +2,16 @@
   "name": "simcoe-turkish-association",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
-    "dev": "/usr/local/bin/node node_modules/next/dist/bin/next dev",
-    "build": "/usr/local/bin/node node_modules/next/dist/bin/next build",
-    "start": "/usr/local/bin/node node_modules/next/dist/bin/next start",
-    "lint": "/usr/local/bin/node node_modules/next/dist/bin/next lint",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "admin:seed": "/usr/local/bin/node scripts/seed-admin.mjs"
+    "admin:seed": "node scripts/seed-admin.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
