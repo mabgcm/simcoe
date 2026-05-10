@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
+import { CommentsSection } from "@/components/news/CommentsSection";
 import { getPublishedNewsBySlug } from "@/lib/content";
 import { getMessages, getRequestLocale } from "@/i18n/server";
 
@@ -24,6 +25,7 @@ export default async function AnnouncementDetailPage({ params }: { params: { slu
         <Image src={article.coverImage} alt={article.title} fill className="object-cover" priority />
       </div>
       <div className="prose-content mt-8 rounded-lg bg-white p-6 shadow-sm" dangerouslySetInnerHTML={{ __html: article.body }} />
+      <CommentsSection postId={article.id} isMemberPost={(article as { source?: string }).source === "member"} />
     </article>
   );
 }

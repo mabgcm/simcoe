@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { updateProfile } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { toast } from "sonner";
@@ -18,9 +19,14 @@ export function PortalProfileForm() {
   const t = useTranslations("portal");
   const common = useTranslations("common");
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const isNew = searchParams.get("new") === "1";
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [phone, setPhone] = useState("");
   const [photoURL, setPhotoURL] = useState(user?.photoURL || "");
+  const [membershipStatus, setMembershipStatus] = useState<string>("pending_payment");
+  const [membershipType, setMembershipType] = useState<string>("individual");
+  const [payLoading, setPayLoading] = useState(false);
   const missing = useMemo(
     () => ({
       displayName: !displayName.trim(),
@@ -38,9 +44,27 @@ export function PortalProfileForm() {
       setDisplayName((data?.displayName as string | undefined) || user.displayName || "");
       setPhone((data?.phone as string | undefined) || "");
       setPhotoURL((data?.photoURL as string | undefined) || user.photoURL || "");
+      setMembershipStatus((data?.membershipStatus as string | undefined) || "pending_payment");
+      setMembershipType((data?.membershipType as string | undefined) || "individual");
     }
     void loadProfile();
   }, [user]);
+
+  async function handlePay() {
+    setPayLoading(true);
+    try {
+      const response = await fetch("/api/membership/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ membershipType, billingCycle: "year" })
+      });
+      const data = await response.json() as { url?: string; error?: string };
+      if (data.url) window.location.href = data.url;
+      else toast.error(data.error || "Ödeme başlatılamadı.");
+    } finally {
+      setPayLoading(false);
+    }
+  }
 
   async function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -59,6 +83,21 @@ export function PortalProfileForm() {
   return (
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
       <h1 className="font-heading text-5xl text-secondary">{t("profile")}</h1>
+
+      {(isNew || membershipStatus === "pending_payment") && (
+        <div className="mt-4 rounded-lg border border-primary/30 bg-primary/5 p-4">
+          <p className="font-semibold text-secondary">
+            {isNew ? "Hoş geldiniz! Profilinizi tamamlayın ve üyelik ücretinizi ödeyin." : "Üyelik ücretiniz henüz ödenmedi."}
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Bireysel üyelik: <strong>$30/yıl</strong> — Ödeme tamamlanana kadar bazı özellikler kısıtlıdır.
+          </p>
+          <Button className="mt-3" size="sm" onClick={handlePay} disabled={payLoading}>
+            {payLoading ? "Yönlendiriliyor..." : "Üyelik Ücretini Öde →"}
+          </Button>
+        </div>
+      )}
+
       {(missing.displayName || missing.phone || missing.photoURL) ? (
         <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm font-semibold text-amber-800">{t("missingInfo")}</p>
       ) : null}

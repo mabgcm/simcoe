@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,6 +37,7 @@ export function RegisterForm() {
   const t = useTranslations("auth");
   const membershipT = useTranslations("membership");
   const searchParams = useSearchParams();
+  const router = useRouter();
   const selected = searchParams.get("plan");
   const plan = (plans.includes(selected as MembershipType) ? selected : "individual") as MembershipType;
   const [error, setError] = useState("");
@@ -69,6 +70,7 @@ export function RegisterForm() {
     try {
       const user = await registerWithEmail(values.email, values.password, values.displayName);
       await writeUser(user.uid, values, "password");
+      router.push("/portal/profile?new=1");
     } catch (err) {
       setError(t(`errors.${authErrorKey(err)}`));
     }
@@ -91,6 +93,7 @@ export function RegisterForm() {
         },
         "google"
       );
+      router.push("/portal/profile?new=1");
     } catch (err) {
       setError(t(`errors.${authErrorKey(err)}`));
     }

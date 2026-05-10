@@ -17,9 +17,10 @@ export function PortalOverview() {
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <h1 className="font-heading text-5xl text-secondary">{t("title")}</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button asChild variant="outline"><Link href="/portal/profile">{t("profile")}</Link></Button>
           <Button asChild variant="outline"><Link href="/portal/events">{t("events")}</Link></Button>
+          <Button asChild><Link href="/portal/posts">Gönderilerim</Link></Button>
         </div>
       </div>
       <div className="mt-8 grid gap-6 lg:grid-cols-[360px_1fr]">

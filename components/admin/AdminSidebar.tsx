@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, Bell, Calendar, CreditCard, FileText, Home, Newspaper, Users } from "lucide-react";
+import { BarChart3, Bell, Calendar, CreditCard, Clock, FileText, Home, Newspaper, Users } from "lucide-react";
 import { getMessages, getRequestLocale } from "@/i18n/server";
 
 /** Admin dashboard sidebar navigation. */
@@ -8,6 +8,7 @@ export function AdminSidebar() {
   const adminLinks = [
     { href: "/admin", label: t.overview, icon: Home },
     { href: "/admin/content/new", label: "Yeni İçerik", icon: FileText },
+    { href: "/admin/pending", label: t.pending, icon: Clock },
     { href: "/admin/news", label: t.news, icon: Newspaper },
     { href: "/admin/announcements", label: t.announcements, icon: Bell },
     { href: "/admin/events", label: t.events, icon: Calendar },

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Facebook, Linkedin, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CommentsSection } from "@/components/news/CommentsSection";
 import { getPublishedNewsBySlug } from "@/lib/content";
 import { getMessages, getRequestLocale } from "@/i18n/server";
 
@@ -32,6 +33,7 @@ export default async function NewsDetailPage({ params }: { params: { slug: strin
         <Button size="icon" variant="outline" aria-label={messages.news.shareEmail}><Mail className="h-4 w-4" /></Button>
       </div>
       <div className="prose-content mt-8 rounded-lg bg-white p-6 shadow-sm" dangerouslySetInnerHTML={{ __html: article.body }} />
+      <CommentsSection postId={article.id} isMemberPost={article.contentType === "news" && (article as { source?: string }).source === "member"} />
     </article>
   );
 }

@@ -113,8 +113,9 @@ function normalizeEvent(id: string, data: Record<string, any>): PublicEvent {
 }
 
 function isVisiblePublished(data: Record<string, any>, now = new Date()) {
-  if (data.status === "draft" || data.publishStatus === "draft") return false;
-  if (data.status === "scheduled" || data.publishStatus === "scheduled") {
+  const s = data.status || data.publishStatus;
+  if (s === "draft" || s === "pending_admin" || s === "rejected") return false;
+  if (s === "scheduled") {
     const date = toDate(data.scheduledAt || data.publishedAt, new Date("2999-12-31"));
     return date.getTime() <= now.getTime();
   }
@@ -190,6 +191,39 @@ export async function listAdminEvents(max = 100) {
 export async function getAdminNewsById(id: string) {
   const snapshot = await getAdminDb().collection("news").doc(id).get();
   return snapshot.exists ? normalizeNews(snapshot.id, snapshot.data() || {}) : null;
+}
+
+export async function listPendingMemberPosts(max = 50) {
+  const snapshot = await getAdminDb()
+    .collection("news")
+    .where("source", "==", "member")
+    .where("status", "==", "pending_admin")
+    .limit(max)
+    .get();
+  return snapshot.docs
+    .map((doc) => ({ ...normalizeNews(doc.id, doc.data()), authorPhotoURL: (doc.data().authorPhotoURL as string) || "" }))
+    .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
+}
+
+export async function getPostComments(postId: string) {
+  const snapshot = await getAdminDb()
+    .collection("news").doc(postId)
+    .collection("comments")
+    .orderBy("createdAt", "asc")
+    .get();
+  return snapshot.docs.map((doc) => {
+    const d = doc.data();
+    const createdAt = d.createdAt ? toDate(d.createdAt) : new Date();
+    return {
+      id: doc.id,
+      authorId: (d.authorId as string) || "",
+      authorName: (d.authorName as string) || "Üye",
+      authorPhotoURL: (d.authorPhotoURL as string) || "",
+      content: (d.content as string) || "",
+      status: (d.status as string) || "pending",
+      createdAt
+    };
+  });
 }
 
 export async function getAdminEventById(id: string) {

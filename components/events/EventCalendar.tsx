@@ -18,7 +18,7 @@ const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales
 type CalEvent = React.ComponentProps<typeof EventCard>["event"] & { endDate: Date };
 type RbcEvent = { title: string; start: Date; end: Date; resource: CalEvent };
 
-const CALENDAR_VIEWS: View[] = ["month", "week", "day", "agenda"];
+const CALENDAR_VIEWS: View[] = ["month", "week", "day"];
 
 export function EventCalendar({ events }: { events: CalEvent[] }) {
   const locale = useLocale();
@@ -117,7 +117,7 @@ export function EventCalendar({ events }: { events: CalEvent[] }) {
           </div>
 
           {/* Calendar body */}
-          <div className="sta-calendar p-3" style={{ height: view === "agenda" ? "auto" : 620, minHeight: view === "agenda" ? 256 : undefined }}>
+          <div className="sta-calendar p-3" style={{ height: 620 }}>
             <Calendar
               localizer={localizer}
               events={rbcEvents}
