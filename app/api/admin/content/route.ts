@@ -4,7 +4,7 @@ import { getAdminAuth, getAdminDb } from "@/lib/firebase/admin";
 import { slugify } from "@/lib/utils/slugify";
 
 const contentTypes = ["news", "announcement", "event"] as const;
-const statuses = ["draft", "published"] as const;
+const statuses = ["draft", "published", "scheduled"] as const;
 
 type ContentType = (typeof contentTypes)[number];
 type PublishStatus = (typeof statuses)[number];
@@ -29,6 +29,12 @@ function asNumber(value: unknown, fallback = 0) {
 function asDate(value: unknown, fallback = new Date()) {
   const date = new Date(asString(value) || fallback);
   return Number.isNaN(date.getTime()) ? fallback : date;
+}
+
+function scheduledTimestamp(status: PublishStatus, value: unknown) {
+  if (status !== "scheduled") return null;
+  const date = asDate(value);
+  return Timestamp.fromDate(date);
 }
 
 async function requireAdmin(request: NextRequest) {
@@ -64,7 +70,8 @@ export async function POST(request: NextRequest) {
     if (!content) return NextResponse.json({ error: "Content is required." }, { status: 400 });
 
     const now = FieldValue.serverTimestamp();
-    const publishedAt = status === "published" ? now : null;
+    const publishAt = scheduledTimestamp(status, body.scheduledAt);
+    const publishedAt = status === "published" ? now : publishAt;
 
     if (contentType === "event") {
       const startDate = asDate(body.startDate);
@@ -88,6 +95,8 @@ export async function POST(request: NextRequest) {
         price: asNumber(body.price),
         status: "upcoming",
         publishStatus: status,
+        publishedAt,
+        scheduledAt: publishAt,
         author: admin.name,
         authorId: admin.uid,
         createdAt: now,
@@ -114,6 +123,7 @@ export async function POST(request: NextRequest) {
       type: contentType === "announcement" ? "announcement" : "news",
       pinned: Boolean(body.pinned),
       publishedAt,
+      scheduledAt: publishAt,
       createdAt: now,
       updatedAt: now,
       viewCount: 0

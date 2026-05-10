@@ -12,7 +12,7 @@ import { ImageUploader } from "@/components/admin/ImageUploader";
 import { slugify } from "@/lib/utils/slugify";
 
 type ContentType = "news" | "announcement" | "event";
-type PublishStatus = "published" | "draft";
+type PublishStatus = "published" | "draft" | "scheduled";
 
 type ContentFormProps = {
   title: string;
@@ -26,6 +26,7 @@ export function ContentForm({ title, defaultType = "news" }: ContentFormProps) {
   const router = useRouter();
   const [contentType, setContentType] = useState<ContentType>(defaultType);
   const [status, setStatus] = useState<PublishStatus>("published");
+  const [scheduledAt, setScheduledAt] = useState("");
   const [name, setName] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [category, setCategory] = useState("");
@@ -53,6 +54,7 @@ export function ContentForm({ title, defaultType = "news" }: ContentFormProps) {
         body: JSON.stringify({
           contentType,
           status,
+          scheduledAt,
           title: name,
           slug,
           excerpt,
@@ -101,6 +103,7 @@ export function ContentForm({ title, defaultType = "news" }: ContentFormProps) {
             Yayın durumu
             <Select value={status} onChange={(event) => setStatus(event.target.value as PublishStatus)}>
               <option value="published">Yayınla</option>
+              <option value="scheduled">Zamanla</option>
               <option value="draft">Taslak</option>
             </Select>
           </label>
@@ -112,6 +115,13 @@ export function ContentForm({ title, defaultType = "news" }: ContentFormProps) {
 
         <Input value={name} onChange={(event) => setName(event.target.value)} placeholder="Başlık" required />
         <Input value={slug} readOnly aria-label="Otomatik slug" />
+
+        {status === "scheduled" ? (
+          <label className="grid gap-2 text-sm font-semibold text-secondary">
+            Yayın zamanı
+            <Input value={scheduledAt} onChange={(event) => setScheduledAt(event.target.value)} type="datetime-local" required />
+          </label>
+        ) : null}
 
         {!isEvent ? <Textarea value={excerpt} onChange={(event) => setExcerpt(event.target.value)} placeholder="Kısa özet" required /> : null}
 
@@ -134,7 +144,7 @@ export function ContentForm({ title, defaultType = "news" }: ContentFormProps) {
 
         <RichTextEditor value={content} onChange={setContent} />
         <div className="flex gap-2">
-          <Button disabled={saving || !name || !content || (isEvent && (!startDate || !endDate || !location))}>{saving ? "Kaydediliyor..." : status === "published" ? "Yayınla" : "Taslak Kaydet"}</Button>
+          <Button disabled={saving || !name || !content || (status === "scheduled" && !scheduledAt) || (isEvent && (!startDate || !endDate || !location))}>{saving ? "Kaydediliyor..." : status === "published" ? "Yayınla" : status === "scheduled" ? "Zamanla" : "Taslak Kaydet"}</Button>
           <Button type="button" variant="outline" onClick={() => router.back()}>
             İptal
           </Button>

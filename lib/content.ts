@@ -15,6 +15,8 @@ export type PublicNewsArticle = {
   author: string;
   readMinutes: number;
   contentType?: "news" | "announcement";
+  status?: "draft" | "published" | "scheduled";
+  scheduledAt?: Date | null;
 };
 
 export type PublicEvent = {
@@ -35,6 +37,9 @@ export type PublicEvent = {
   registrationDeadline: Date | null;
   price: number;
   status: "upcoming" | "ongoing" | "past" | "cancelled";
+  publishStatus?: "draft" | "published" | "scheduled";
+  publishedAt?: Date | null;
+  scheduledAt?: Date | null;
 };
 
 function toDate(value: unknown, fallback = new Date()) {
@@ -55,6 +60,7 @@ function estimateReadMinutes(html: string) {
 
 function normalizeNews(id: string, data: Record<string, any>): PublicNewsArticle {
   const body = data.body || data.content || "";
+  const scheduledAt = data.scheduledAt ? toDate(data.scheduledAt) : null;
   return {
     id,
     title: data.title || "",
@@ -67,12 +73,15 @@ function normalizeNews(id: string, data: Record<string, any>): PublicNewsArticle
     publishedAt: toDate(data.publishedAt || data.createdAt),
     author: data.author || "Simcoe County Turkish Association",
     readMinutes: data.readMinutes || estimateReadMinutes(body),
-    contentType: data.contentType === "announcement" ? "announcement" : "news"
+    contentType: data.contentType === "announcement" ? "announcement" : "news",
+    status: data.status || "published",
+    scheduledAt
   };
 }
 
 function normalizeEvent(id: string, data: Record<string, any>): PublicEvent {
   const startDate = toDate(data.startDate || data.createdAt);
+  const scheduledAt = data.scheduledAt ? toDate(data.scheduledAt) : null;
   return {
     id,
     title: data.title || "",
@@ -90,14 +99,26 @@ function normalizeEvent(id: string, data: Record<string, any>): PublicEvent {
     registrationRequired: Boolean(data.registrationRequired),
     registrationDeadline: data.registrationDeadline ? toDate(data.registrationDeadline) : null,
     price: typeof data.price === "number" ? data.price : 0,
-    status: data.status || "upcoming"
+    status: data.status || "upcoming",
+    publishStatus: data.publishStatus || "published",
+    publishedAt: data.publishedAt ? toDate(data.publishedAt) : null,
+    scheduledAt
   };
+}
+
+function isVisiblePublished(data: Record<string, any>, now = new Date()) {
+  if (data.status === "draft" || data.publishStatus === "draft") return false;
+  if (data.status === "scheduled" || data.publishStatus === "scheduled") {
+    const date = toDate(data.scheduledAt || data.publishedAt, new Date("2999-12-31"));
+    return date.getTime() <= now.getTime();
+  }
+  return true;
 }
 
 export async function listPublishedNews(locale: string, max = 24) {
   try {
-    const snapshot = await getAdminDb().collection("news").where("status", "==", "published").orderBy("publishedAt", "desc").limit(max).get();
-    const articles = snapshot.docs.map((doc) => normalizeNews(doc.id, doc.data()));
+    const snapshot = await getAdminDb().collection("news").orderBy("publishedAt", "desc").limit(max).get();
+    const articles = snapshot.docs.filter((doc) => isVisiblePublished(doc.data())).map((doc) => normalizeNews(doc.id, doc.data()));
     return articles.length ? articles : getDemoNews(locale);
   } catch (error) {
     console.error("Unable to load Firestore news.", error);
@@ -114,7 +135,7 @@ export async function listEvents(locale: string, max = 50) {
   try {
     const snapshot = await getAdminDb().collection("events").orderBy("startDate", "asc").limit(max).get();
     const events = snapshot.docs
-      .filter((doc) => doc.data().publishStatus !== "draft")
+      .filter((doc) => isVisiblePublished(doc.data()))
       .map((doc) => normalizeEvent(doc.id, doc.data()))
       .filter((event) => event.status !== "cancelled");
     return events.length ? events : getDemoEvents(locale);

@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/components/admin/DataTable";
 import { listAdminNews } from "@/lib/content";
+
+function statusBadge(status?: string, scheduledAt?: Date | null) {
+  if (status === "draft") return <Badge className="bg-slate-100 text-slate-700">Taslak</Badge>;
+  if (status === "scheduled") return <Badge className="bg-amber-100 text-amber-800">Zamanlandı{scheduledAt ? ` · ${scheduledAt.toLocaleString("tr-CA")}` : ""}</Badge>;
+  return <Badge className="bg-green-100 text-green-800">Yayında</Badge>;
+}
 
 /** Admin news management page. */
 export default async function AdminNewsPage() {
@@ -19,7 +26,7 @@ export default async function AdminNewsPage() {
             Title: item.title,
             Type: item.contentType === "announcement" ? "Duyuru" : "Haber",
             Category: item.category,
-            Status: "published"
+            Status: statusBadge(item.status, item.scheduledAt)
           }))}
         />
       </div>
