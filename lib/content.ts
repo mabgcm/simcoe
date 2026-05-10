@@ -14,6 +14,8 @@ export type PublicNewsArticle = {
   publishedAt: Date;
   author: string;
   authorId: string;
+  authorPhotoURL: string;
+  source: "member" | "admin";
   readMinutes: number;
   contentType?: "news" | "announcement";
   status?: "draft" | "published" | "scheduled";
@@ -76,6 +78,8 @@ function normalizeNews(id: string, data: Record<string, any>): PublicNewsArticle
     publishedAt: toDate(data.publishedAt || data.createdAt),
     author: data.author || "Simcoe County Turkish Association",
     authorId: data.authorId || "",
+    authorPhotoURL: (data.authorPhotoURL as string) || "",
+    source: data.source === "member" ? "member" : "admin",
     readMinutes: data.readMinutes || estimateReadMinutes(body),
     contentType: data.contentType === "announcement" ? "announcement" : "news",
     status: data.status || "published",
