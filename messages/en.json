@@ -161,10 +161,42 @@
     "join": "Become a Member",
     "perYear": "/year",
     "plans": {
-      "individual": { "name": "Individual", "price": "30", "perks": ["Member portal", "Event priority", "Community board"] },
-      "family": { "name": "Family", "price": "50", "perks": ["Family members", "Family events", "Newcomer support"] },
-      "student": { "name": "Student", "price": "15", "perks": ["Youth programs", "Volunteer hours", "Mentorship"] },
-      "corporate": { "name": "Corporate", "price": "150", "perks": ["Sponsor visibility", "Networking", "Community partnerships"] }
+      "individual": {
+        "name": "Individual",
+        "price": "30",
+        "perks": [
+          "Member portal",
+          "Event priority",
+          "Community board"
+        ]
+      },
+      "family": {
+        "name": "Family",
+        "price": "50",
+        "perks": [
+          "Family members",
+          "Family events",
+          "Newcomer support"
+        ]
+      },
+      "student": {
+        "name": "Student",
+        "price": "15",
+        "perks": [
+          "Youth programs",
+          "Volunteer hours",
+          "Mentorship"
+        ]
+      },
+      "corporate": {
+        "name": "Corporate",
+        "price": "150",
+        "perks": [
+          "Sponsor visibility",
+          "Networking",
+          "Community partnerships"
+        ]
+      }
     }
   },
   "auth": {
@@ -229,8 +261,18 @@
     "privacyTitle": "Privacy Policy",
     "termsTitle": "Terms of Service",
     "updated": "Last updated: May 9, 2026",
-    "privacyBody": ["Simcoe County Turkish Association processes personal information only for membership, event registration, communication and community services.", "Collected information may include name, email, phone, membership plan, event participation details and messages shared voluntarily.", "Data is stored securely in Firebase and selected service providers. Role-based access and security rules are used to prevent unauthorized access.", "You may contact us to request correction or deletion of your personal information."],
-    "termsBody": ["By using this website, you agree to follow the Simcoe County Turkish Association platform rules.", "Content shared in the member portal must be respectful, accurate and supportive of community safety.", "The association reserves the right to remove inappropriate content and limit account access when necessary.", "Events, memberships and announcements may be updated by the association board."]
+    "privacyBody": [
+      "Simcoe County Turkish Association processes personal information only for membership, event registration, communication and community services.",
+      "Collected information may include name, email, phone, membership plan, event participation details and messages shared voluntarily.",
+      "Data is stored securely in Firebase and selected service providers. Role-based access and security rules are used to prevent unauthorized access.",
+      "You may contact us to request correction or deletion of your personal information."
+    ],
+    "termsBody": [
+      "By using this website, you agree to follow the Simcoe County Turkish Association platform rules.",
+      "Content shared in the member portal must be respectful, accurate and supportive of community safety.",
+      "The association reserves the right to remove inappropriate content and limit account access when necessary.",
+      "Events, memberships and announcements may be updated by the association board."
+    ]
   },
   "gallery": {
     "eyebrow": "Gallery",
@@ -246,7 +288,12 @@
     "visionTitle": "Vision",
     "vision": "To be a strong community where newcomers settle with confidence, families find support and our culture is passed across generations.",
     "valuesTitle": "Values",
-    "values": ["Solidarity", "Transparency", "Inclusion", "Volunteerism"],
+    "values": [
+      "Solidarity",
+      "Transparency",
+      "Inclusion",
+      "Volunteerism"
+    ],
     "boardTitle": "Board of Directors",
     "historyTitle": "History",
     "history": "Started in 2018 by volunteer families, STA has grown into a Simcoe County community network with events, guidance programs and membership services."
@@ -265,7 +312,8 @@
     "name": "Name",
     "email": "Email",
     "message": "Your message",
-    "button": "Donate"
+    "button": "Donate",
+    "amount": "Amount"
   },
   "notFound": {
     "code": "404",
@@ -289,5 +337,13 @@
     "text": "We use analytics cookies to improve the experience.",
     "accept": "Accept",
     "preferences": "Preferences"
+  },
+  "payment": {
+    "method": "Payment method",
+    "creditCard": "Credit Card",
+    "interacTitle": "Interac e-Transfer Instructions",
+    "interacStep1": "Send an e-Transfer from your bank's app.",
+    "interacStep2": "Recipient email:",
+    "interacStep3": "Include your name and payment type in the note field."
   }
 }

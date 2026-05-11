@@ -161,10 +161,42 @@
     "join": "Şimdi Üye Ol",
     "perYear": "/yıl",
     "plans": {
-      "individual": { "name": "Bireysel", "price": "30", "perks": ["Üye portalı", "Etkinlik önceliği", "Topluluk panosu"] },
-      "family": { "name": "Aile", "price": "50", "perks": ["Aile üyeleri", "Aile etkinlikleri", "Rehber desteği"] },
-      "student": { "name": "Öğrenci", "price": "15", "perks": ["Gençlik programı", "Gönüllülük saatleri", "Mentorluk"] },
-      "corporate": { "name": "Kurumsal", "price": "150", "perks": ["Sponsor görünürlüğü", "Networking", "Topluluk işbirliği"] }
+      "individual": {
+        "name": "Bireysel",
+        "price": "30",
+        "perks": [
+          "Üye portalı",
+          "Etkinlik önceliği",
+          "Topluluk panosu"
+        ]
+      },
+      "family": {
+        "name": "Aile",
+        "price": "50",
+        "perks": [
+          "Aile üyeleri",
+          "Aile etkinlikleri",
+          "Rehber desteği"
+        ]
+      },
+      "student": {
+        "name": "Öğrenci",
+        "price": "15",
+        "perks": [
+          "Gençlik programı",
+          "Gönüllülük saatleri",
+          "Mentorluk"
+        ]
+      },
+      "corporate": {
+        "name": "Kurumsal",
+        "price": "150",
+        "perks": [
+          "Sponsor görünürlüğü",
+          "Networking",
+          "Topluluk işbirliği"
+        ]
+      }
     }
   },
   "auth": {
@@ -229,8 +261,18 @@
     "privacyTitle": "Gizlilik ve KVKK Politikası",
     "termsTitle": "Kullanım Şartları",
     "updated": "Son güncelleme: 9 Mayıs 2026",
-    "privacyBody": ["Simcoe County Turkish Association, üyelerinin ve ziyaretçilerinin kişisel verilerini yalnızca üyelik, etkinlik kaydı, iletişim ve topluluk hizmetleri amacıyla işler.", "Toplanan veriler ad, e-posta, telefon, üyelik planı, etkinlik katılım bilgileri ve gönüllü olarak paylaşılan mesajlardan oluşabilir.", "Veriler Firebase ve seçilen hizmet sağlayıcılarında güvenli şekilde saklanır. Yetkisiz erişimi önlemek için rol tabanlı erişim ve güvenlik kuralları uygulanır.", "Kişisel verilerinizin düzeltilmesini veya silinmesini istemek için bizimle iletişime geçebilirsiniz."],
-    "termsBody": ["Bu web sitesini kullanarak Simcoe County Turkish Association platform kurallarına uymayı kabul edersiniz.", "Üye portalında paylaşılan içerikler saygılı, doğru ve topluluk güvenliğini destekleyen nitelikte olmalıdır.", "Dernek, uygunsuz içerikleri kaldırma ve gerekli durumlarda hesap erişimini sınırlama hakkını saklı tutar.", "Etkinlikler, üyelikler ve duyurular dernek yönetimi tarafından güncellenebilir."]
+    "privacyBody": [
+      "Simcoe County Turkish Association, üyelerinin ve ziyaretçilerinin kişisel verilerini yalnızca üyelik, etkinlik kaydı, iletişim ve topluluk hizmetleri amacıyla işler.",
+      "Toplanan veriler ad, e-posta, telefon, üyelik planı, etkinlik katılım bilgileri ve gönüllü olarak paylaşılan mesajlardan oluşabilir.",
+      "Veriler Firebase ve seçilen hizmet sağlayıcılarında güvenli şekilde saklanır. Yetkisiz erişimi önlemek için rol tabanlı erişim ve güvenlik kuralları uygulanır.",
+      "Kişisel verilerinizin düzeltilmesini veya silinmesini istemek için bizimle iletişime geçebilirsiniz."
+    ],
+    "termsBody": [
+      "Bu web sitesini kullanarak Simcoe County Turkish Association platform kurallarına uymayı kabul edersiniz.",
+      "Üye portalında paylaşılan içerikler saygılı, doğru ve topluluk güvenliğini destekleyen nitelikte olmalıdır.",
+      "Dernek, uygunsuz içerikleri kaldırma ve gerekli durumlarda hesap erişimini sınırlama hakkını saklı tutar.",
+      "Etkinlikler, üyelikler ve duyurular dernek yönetimi tarafından güncellenebilir."
+    ]
   },
   "gallery": {
     "eyebrow": "Galeri",
@@ -246,7 +288,12 @@
     "visionTitle": "Vizyon",
     "vision": "Yeni gelenlerin güvenle yerleştiği, ailelerin destek bulduğu ve kültürümüzün kuşaklar arası aktarıldığı güçlü bir topluluk olmak.",
     "valuesTitle": "Değerler",
-    "values": ["Dayanışma", "Şeffaflık", "Kapsayıcılık", "Gönüllülük"],
+    "values": [
+      "Dayanışma",
+      "Şeffaflık",
+      "Kapsayıcılık",
+      "Gönüllülük"
+    ],
     "boardTitle": "Yönetim Kurulu",
     "historyTitle": "Tarihçe",
     "history": "2018 yılında gönüllü ailelerin girişimiyle başlayan STA, bugün etkinlikler, rehberlik çalışmaları ve üyelik programlarıyla Simcoe County'de büyüyen bir topluluk ağıdır."
@@ -265,7 +312,8 @@
     "name": "İsim",
     "email": "E-posta",
     "message": "Mesajınız",
-    "button": "Bağış Yap"
+    "button": "Bağış Yap",
+    "amount": "Bağış tutarı"
   },
   "notFound": {
     "code": "404",
@@ -289,5 +337,13 @@
     "text": "Deneyimi iyileştirmek için analiz çerezleri kullanıyoruz.",
     "accept": "Kabul et",
     "preferences": "Tercihlerim"
+  },
+  "payment": {
+    "method": "Ödeme yöntemi",
+    "creditCard": "Kredi Kartı",
+    "interacTitle": "Interac e-Transfer Talimatları",
+    "interacStep1": "Bankanızın uygulamasından e-Transfer gönderin.",
+    "interacStep2": "Alıcı e-posta:",
+    "interacStep3": "Açıklama alanına adınızı ve ödeme türünü yazın."
   }
 }

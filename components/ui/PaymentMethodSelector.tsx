@@ -1,6 +1,7 @@
 "use client";
 
 import { Copy } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils/cn";
 
@@ -19,13 +20,15 @@ type Props = {
 
 /** Reusable credit-card / Interac e-Transfer payment method picker. */
 export function PaymentMethodSelector({ value, onChange, interacNote, interacFooter }: Props) {
+  const t = useTranslations("payment");
+
   function copy() {
     navigator.clipboard.writeText(INTERAC_EMAIL).then(() => toast.success("E-posta kopyalandı.")).catch(() => {});
   }
 
   return (
     <div className="grid gap-3">
-      <p className="text-sm font-semibold text-secondary">Ödeme yöntemi</p>
+      <p className="text-sm font-semibold text-secondary">{t("method")}</p>
       <div className="grid grid-cols-2 gap-3">
         <button
           type="button"
@@ -42,7 +45,7 @@ export function PaymentMethodSelector({ value, onChange, interacNote, interacFoo
             <path d="M2 10h20" />
             <path d="M6 15h4" strokeLinecap="round" />
           </svg>
-          Kredi Kartı
+          {t("creditCard")}
         </button>
 
         <button
@@ -55,7 +58,6 @@ export function PaymentMethodSelector({ value, onChange, interacNote, interacFoo
               : "border-border text-secondary hover:border-primary/40"
           )}
         >
-          {/* Interac wordmark-style icon */}
           <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <circle cx="12" cy="12" r="9" />
             <path d="M8 12h8M12 8v8" strokeLinecap="round" />
@@ -66,11 +68,11 @@ export function PaymentMethodSelector({ value, onChange, interacNote, interacFoo
 
       {value === "interac" && (
         <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
-          <p className="text-sm font-semibold text-secondary">Interac e-Transfer talimatları</p>
+          <p className="text-sm font-semibold text-secondary">{t("interacTitle")}</p>
           <ol className="mt-2 grid gap-1.5 text-sm text-muted-foreground list-decimal list-inside">
-            <li>Bankanızın uygulamasından e-Transfer gönderin.</li>
+            <li>{t("interacStep1")}</li>
             <li>
-              Alıcı e-posta:
+              {t("interacStep2")}
               <button
                 type="button"
                 onClick={copy}
@@ -80,7 +82,7 @@ export function PaymentMethodSelector({ value, onChange, interacNote, interacFoo
                 <Copy className="h-3.5 w-3.5" />
               </button>
             </li>
-            <li>Açıklama/not alanına <strong>adınızı</strong> ve ödeme türünü yazın.</li>
+            <li>{t("interacStep3")}</li>
             {interacNote && <li>{interacNote}</li>}
           </ol>
           {interacFooter && (

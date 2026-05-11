@@ -45,7 +45,7 @@ export function DonateForm() {
     }
   }
 
-  const interacNote = `Bağış tutarı: $${amount} CAD${interval !== "once" ? ` (${interval === "month" ? "aylık" : "yıllık"})` : ""}`;
+  const interacNote = `${t("amount")}: $${amount} CAD${interval !== "once" ? ` (${interval === "month" ? t("month") : t("year")})` : ""}`;
 
   return (
     <div className="mt-8 rounded-lg border bg-white p-6 shadow-sm">
