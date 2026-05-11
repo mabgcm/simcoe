@@ -29,6 +29,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   if (!postSnap.exists || postSnap.data()?.status !== "published") {
     return NextResponse.json({ error: "Post not found." }, { status: 404 });
   }
+  const postAuthorId = postSnap.data()?.authorId as string | undefined;
 
   const body = await request.json() as Record<string, unknown>;
   const content = typeof body.content === "string" ? body.content.trim() : "";
@@ -45,6 +46,9 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     }
   }
 
+  // Post author's own comments/replies are auto-approved.
+  const isAuthor = member.uid === postAuthorId;
+
   const commentRef = await getAdminDb()
     .collection("news").doc(params.id)
     .collection("comments")
@@ -54,9 +58,9 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       authorPhotoURL: member.photoURL,
       content,
       parentId,
-      status: "pending",
+      status: isAuthor ? "approved" : "pending",
       createdAt: FieldValue.serverTimestamp()
     });
 
-  return NextResponse.json({ id: commentRef.id });
+  return NextResponse.json({ id: commentRef.id, autoApproved: isAuthor });
 }

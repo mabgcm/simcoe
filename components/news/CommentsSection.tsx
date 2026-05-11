@@ -46,7 +46,8 @@ function ReplyForm({ postId, parentId, onDone }: { postId: string; parentId: str
         body: JSON.stringify({ content: text.trim(), parentId })
       });
       if (res.ok) {
-        toast.success("Yanıtınız gönderildi. Onaylandıktan sonra görünecek.");
+        const data = await res.json() as { autoApproved?: boolean };
+        toast.success(data.autoApproved ? "Yanıtınız yayınlandı." : "Yanıtınız gönderildi. Onaylandıktan sonra görünecek.");
         setText("");
         onDone();
       } else {
@@ -100,8 +101,10 @@ export function CommentsSection({ postId, isMemberPost }: Props) {
         body: JSON.stringify({ content: newText.trim() })
       });
       if (res.ok) {
-        toast.success("Yorumunuz gönderildi. Onaylandıktan sonra yayınlanacak.");
+        const data = await res.json() as { autoApproved?: boolean };
+        toast.success(data.autoApproved ? "Yorumunuz yayınlandı." : "Yorumunuz gönderildi. Onaylandıktan sonra yayınlanacak.");
         setNewText("");
+        if (data.autoApproved) loadComments();
       } else {
         const payload = await res.json().catch(() => null) as { error?: string } | null;
         toast.error(payload?.error || "Yorum gönderilemedi.");
