@@ -63,14 +63,17 @@ function estimateReadMinutes(html: string) {
   return Math.max(1, Math.ceil(words / 220));
 }
 
-function normalizeNews(id: string, data: Record<string, any>): PublicNewsArticle {
-  const body = data.body || data.content || "";
+function normalizeNews(id: string, data: Record<string, any>, locale = "tr"): PublicNewsArticle {
+  const t = (data.translations as Record<string, any> | undefined)?.[locale];
+  const body = t?.body || data.body || data.content || "";
+  const title = t?.title || data.title || "";
+  const excerpt = t?.excerpt || data.excerpt || "";
   const scheduledAt = data.scheduledAt ? toDate(data.scheduledAt) : null;
   return {
     id,
-    title: data.title || "",
+    title,
     slug: data.slug || id,
-    excerpt: data.excerpt || "",
+    excerpt,
     body,
     content: body,
     category: data.category || (data.contentType === "announcement" ? "Duyuru" : "Haber"),
@@ -87,15 +90,16 @@ function normalizeNews(id: string, data: Record<string, any>): PublicNewsArticle
   };
 }
 
-function normalizeEvent(id: string, data: Record<string, any>): PublicEvent {
+function normalizeEvent(id: string, data: Record<string, any>, locale = "tr"): PublicEvent {
+  const t = (data.translations as Record<string, any> | undefined)?.[locale];
   const startDate = toDate(data.startDate || data.createdAt);
   const scheduledAt = data.scheduledAt ? toDate(data.scheduledAt) : null;
   return {
     id,
-    title: data.title || "",
+    title: t?.title || data.title || "",
     slug: data.slug || id,
-    description: data.description || data.content || "",
-    conditions: data.conditions || "",
+    description: t?.body || data.description || data.content || "",
+    conditions: t?.excerpt || data.conditions || "",
     location: data.location || "",
     address: data.address || data.location || "",
     startDate,
@@ -129,7 +133,7 @@ function isVisiblePublished(data: Record<string, any>, now = new Date()) {
 export async function listPublishedNews(locale: string, max = 24): Promise<PublicNewsArticle[]> {
   try {
     const snapshot = await getAdminDb().collection("news").orderBy("publishedAt", "desc").limit(max).get();
-    const articles = snapshot.docs.filter((doc) => isVisiblePublished(doc.data())).map((doc) => normalizeNews(doc.id, doc.data()));
+    const articles = snapshot.docs.filter((doc) => isVisiblePublished(doc.data())).map((doc) => normalizeNews(doc.id, doc.data(), locale));
     return articles.length ? articles : (getDemoNews(locale) as unknown as PublicNewsArticle[]);
   } catch (error) {
     console.error("Unable to load Firestore news.", error);
@@ -147,7 +151,7 @@ export async function listEvents(locale: string, max = 50) {
     const snapshot = await getAdminDb().collection("events").orderBy("startDate", "asc").limit(max).get();
     const events = snapshot.docs
       .filter((doc) => isVisiblePublished(doc.data()))
-      .map((doc) => normalizeEvent(doc.id, doc.data()))
+      .map((doc) => normalizeEvent(doc.id, doc.data(), locale))
       .filter((event) => event.status !== "cancelled");
     return events.length ? events : getDemoEvents(locale);
   } catch (error) {
@@ -166,7 +170,7 @@ export async function listPublishedAnnouncements(locale: string, max = 24) {
     const snapshot = await getAdminDb().collection("news").where("contentType", "==", "announcement").limit(max * 2).get();
     return snapshot.docs
       .filter((doc) => isVisiblePublished(doc.data()))
-      .map((doc) => normalizeNews(doc.id, doc.data()))
+      .map((doc) => normalizeNews(doc.id, doc.data(), locale))
       .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
       .slice(0, max);
   } catch (error) {

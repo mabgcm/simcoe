@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase/admin";
+import { translateContent } from "@/lib/translate";
 
 async function requireAdmin(request: NextRequest) {
   const session = request.cookies.get("session")?.value;
@@ -31,6 +32,16 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     { status: "published", publishedAt: FieldValue.serverTimestamp(), approvedBy: admin.uid, updatedAt: FieldValue.serverTimestamp() },
     { merge: true }
   );
+
+  // Translate after approval — fire-and-forget so the response is instant.
+  const d = snap.data()!;
+  translateContent({
+    title: (d.title as string) || "",
+    excerpt: (d.excerpt as string) || "",
+    body: (d.body as string) || (d.content as string) || ""
+  })
+    .then((t) => ref.update({ translations: t }))
+    .catch(console.error);
 
   return NextResponse.json({ ok: true });
 }

@@ -3,6 +3,7 @@ import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase/admin";
 import { slugify } from "@/lib/utils/slugify";
 import { parseTorontoDateTime } from "@/lib/utils/timeZone";
+import { translateContent } from "@/lib/translate";
 
 const collections = ["news", "events"] as const;
 const statuses = ["draft", "published", "scheduled"] as const;
@@ -87,13 +88,14 @@ export async function PATCH(request: NextRequest, { params }: { params: { collec
     if (owned.collectionName === "events") {
       const startDate = asDate(body.startDate);
       const endDate = asDate(body.endDate, startDate);
+      const conditions = asString(body.conditions);
       await owned.ref.set(
         {
           title,
           slug,
           description: content,
           content,
-          conditions: asString(body.conditions),
+          conditions,
           location: asString(body.location),
           address: asString(body.address) || asString(body.location),
           startDate: Timestamp.fromDate(startDate),
@@ -109,15 +111,19 @@ export async function PATCH(request: NextRequest, { params }: { params: { collec
         },
         { merge: true }
       );
+      translateContent({ title, excerpt: conditions, body: content })
+        .then((t) => owned.ref.update({ translations: t }))
+        .catch(console.error);
       return NextResponse.json({ ok: true });
     }
 
     const contentType = body.contentType === "announcement" ? "announcement" : "news";
+    const excerpt = asString(body.excerpt);
     await owned.ref.set(
       {
         title,
         slug,
-        excerpt: asString(body.excerpt),
+        excerpt,
         content,
         body: content,
         coverImage: asString(body.coverImage),
@@ -132,6 +138,9 @@ export async function PATCH(request: NextRequest, { params }: { params: { collec
       },
       { merge: true }
     );
+    translateContent({ title, excerpt, body: content })
+      .then((t) => owned.ref.update({ translations: t }))
+      .catch(console.error);
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error(error);

@@ -3,6 +3,7 @@ import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase/admin";
 import { slugify } from "@/lib/utils/slugify";
 import { parseTorontoDateTime } from "@/lib/utils/timeZone";
+import { translateContent } from "@/lib/translate";
 
 const contentTypes = ["news", "announcement", "event"] as const;
 const statuses = ["draft", "published", "scheduled"] as const;
@@ -77,12 +78,13 @@ export async function POST(request: NextRequest) {
     if (contentType === "event") {
       const startDate = asDate(body.startDate);
       const endDate = asDate(body.endDate, startDate);
+      const conditions = asString(body.conditions);
       const docRef = await getAdminDb().collection("events").add({
         title,
         slug,
         description: content,
         content,
-        conditions: asString(body.conditions),
+        conditions,
         location: asString(body.location),
         address: asString(body.address) || asString(body.location),
         startDate: Timestamp.fromDate(startDate),
@@ -104,13 +106,19 @@ export async function POST(request: NextRequest) {
         updatedAt: now
       });
 
+      // Translate asynchronously — do not block the response.
+      translateContent({ title, excerpt: conditions, body: content })
+        .then((t) => docRef.update({ translations: t }))
+        .catch(console.error);
+
       return NextResponse.json({ id: docRef.id, slug, collection: "events" });
     }
 
+    const excerpt = asString(body.excerpt);
     const docRef = await getAdminDb().collection("news").add({
       title,
       slug,
-      excerpt: asString(body.excerpt),
+      excerpt,
       content,
       body: content,
       coverImage: asString(body.coverImage),
@@ -129,6 +137,10 @@ export async function POST(request: NextRequest) {
       updatedAt: now,
       viewCount: 0
     });
+
+    translateContent({ title, excerpt, body: content })
+      .then((t) => docRef.update({ translations: t }))
+      .catch(console.error);
 
     return NextResponse.json({ id: docRef.id, slug, collection: "news" });
   } catch (error) {
