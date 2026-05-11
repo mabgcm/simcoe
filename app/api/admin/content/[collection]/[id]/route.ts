@@ -111,9 +111,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { collec
         },
         { merge: true }
       );
-      translateContent({ title, excerpt: conditions, body: content })
-        .then((t) => owned.ref.update({ translations: t }))
-        .catch(console.error);
+      const translations = await translateContent({ title, excerpt: conditions, body: content });
+      await owned.ref.update({ translations });
       return NextResponse.json({ ok: true });
     }
 
@@ -138,9 +137,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { collec
       },
       { merge: true }
     );
-    translateContent({ title, excerpt, body: content })
-      .then((t) => owned.ref.update({ translations: t }))
-      .catch(console.error);
+    const translations = await translateContent({ title, excerpt, body: content });
+    await owned.ref.update({ translations });
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error(error);

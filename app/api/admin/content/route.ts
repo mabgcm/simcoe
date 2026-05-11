@@ -107,9 +107,8 @@ export async function POST(request: NextRequest) {
       });
 
       // Translate asynchronously — do not block the response.
-      translateContent({ title, excerpt: conditions, body: content })
-        .then((t) => docRef.update({ translations: t }))
-        .catch(console.error);
+      const translations = await translateContent({ title, excerpt: conditions, body: content });
+      await docRef.update({ translations });
 
       return NextResponse.json({ id: docRef.id, slug, collection: "events" });
     }
@@ -138,9 +137,8 @@ export async function POST(request: NextRequest) {
       viewCount: 0
     });
 
-    translateContent({ title, excerpt, body: content })
-      .then((t) => docRef.update({ translations: t }))
-      .catch(console.error);
+    const translations = await translateContent({ title, excerpt, body: content });
+      await docRef.update({ translations });
 
     return NextResponse.json({ id: docRef.id, slug, collection: "news" });
   } catch (error) {

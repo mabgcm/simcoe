@@ -33,15 +33,13 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     { merge: true }
   );
 
-  // Translate after approval — fire-and-forget so the response is instant.
   const d = snap.data()!;
-  translateContent({
+  const translations = await translateContent({
     title: (d.title as string) || "",
     excerpt: (d.excerpt as string) || "",
     body: (d.body as string) || (d.content as string) || ""
-  })
-    .then((t) => ref.update({ translations: t }))
-    .catch(console.error);
+  });
+  await ref.update({ translations });
 
   return NextResponse.json({ ok: true });
 }
