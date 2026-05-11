@@ -13,10 +13,12 @@ type Props = {
   onChange: (method: PaymentMethod) => void;
   /** Extra details shown in the Interac panel (e.g. amount label). */
   interacNote?: string;
+  /** Footer note shown at the bottom of the Interac panel. */
+  interacFooter?: string;
 };
 
 /** Reusable credit-card / Interac e-Transfer payment method picker. */
-export function PaymentMethodSelector({ value, onChange, interacNote }: Props) {
+export function PaymentMethodSelector({ value, onChange, interacNote, interacFooter }: Props) {
   function copy() {
     navigator.clipboard.writeText(INTERAC_EMAIL).then(() => toast.success("E-posta kopyalandı.")).catch(() => {});
   }
@@ -81,9 +83,11 @@ export function PaymentMethodSelector({ value, onChange, interacNote }: Props) {
             <li>Açıklama/not alanına <strong>adınızı</strong> ve ödeme türünü yazın.</li>
             {interacNote && <li>{interacNote}</li>}
           </ol>
-          <p className="mt-3 rounded-lg bg-white px-3 py-2 text-xs text-muted-foreground">
-            Ödemeniz dernek tarafından doğrulandıktan sonra üyeliğiniz aktif edilecektir.
-          </p>
+          {interacFooter && (
+            <p className="mt-3 rounded-lg bg-white px-3 py-2 text-xs text-muted-foreground">
+              {interacFooter}
+            </p>
+          )}
         </div>
       )}
     </div>

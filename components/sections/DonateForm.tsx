@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,8 +32,14 @@ export function DonateForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount, interval, donorName: name.trim(), donorEmail: email.trim() })
       });
-      const data = await response.json() as { url?: string };
-      if (data.url) window.location.href = data.url;
+      const data = await response.json() as { url?: string; error?: string };
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error(data.error || "Ödeme sayfası açılamadı. Lütfen tekrar deneyin.");
+      }
+    } catch {
+      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
     } finally {
       setLoading(false);
     }

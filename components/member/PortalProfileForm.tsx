@@ -100,6 +100,7 @@ export function PortalProfileForm() {
             value={payMethod}
             onChange={setPayMethod}
             interacNote="Açıklama alanına adınızı ve 'Üyelik' yazın."
+            interacFooter="Ödemeniz dernek tarafından doğrulandıktan sonra üyeliğiniz aktif edilecektir."
           />
           {payMethod === "card" && (
             <Button onClick={handlePay} disabled={payLoading} className="w-fit">
