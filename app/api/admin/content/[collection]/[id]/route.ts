@@ -56,8 +56,16 @@ async function getOwnedDocument(request: NextRequest, collection: string, id: st
   const ref = getAdminDb().collection(collection).doc(id);
   const snapshot = await ref.get();
   if (!snapshot.exists) return { error: NextResponse.json({ error: "Content not found" }, { status: 404 }) };
-  if (snapshot.data()?.authorId !== admin.uid) return { error: NextResponse.json({ error: "Only the creator can change this content." }, { status: 403 }) };
-  return { admin, ref, data: snapshot.data() || {}, collectionName: collection as CollectionName };
+
+  const data = snapshot.data() || {};
+  const isOwner = data.authorId === admin.uid;
+  // Super admins and any admin can edit pending member posts.
+  const isMemberPending = data.source === "member" && data.status === "pending_admin";
+  const isSuperAdmin = admin.role === "super_admin";
+  if (!isOwner && !isMemberPending && !isSuperAdmin) {
+    return { error: NextResponse.json({ error: "Only the creator can change this content." }, { status: 403 }) };
+  }
+  return { admin, ref, data, collectionName: collection as CollectionName };
 }
 
 /** Updates owner-managed admin content. */
