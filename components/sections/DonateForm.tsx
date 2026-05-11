@@ -62,7 +62,7 @@ export function DonateForm() {
         type="number"
         min={1}
         value={amount}
-        onChange={(e) => setAmount(Number(e.target.value))}
+        onChange={(e) => { const v = Number(e.target.value); setAmount(Number.isFinite(v) ? v : 0); }}
         aria-label={t("customAmount")}
       />
 
@@ -107,7 +107,7 @@ export function DonateForm() {
         <Button
           className="mt-5 w-full"
           onClick={checkout}
-          disabled={loading || !name.trim() || !email.trim() || amount < 1}
+          disabled={loading || !name.trim() || !email.trim() || !(amount >= 1)}
         >
           {loading ? "Yönlendiriliyor..." : `${t("button")} — $${amount} CAD`}
         </Button>
